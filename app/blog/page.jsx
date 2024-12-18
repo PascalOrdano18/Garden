@@ -24,7 +24,7 @@ export default async function BlogPage(){
 
     return (
         <div>
-          <h1 className="text-3xl font-bold">Blog</h1>
+          <h1 className="text-3xl font-bold">Journal</h1>
           <ul>
             {posts.map(({ slug, title, date }) => (
               <li key={slug} className='my-8'>

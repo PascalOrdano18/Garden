@@ -25,11 +25,9 @@ export default async function BlogPost({ params }){
     const { data, content } = matter(fileContents);
 
     return(
-        <div>
-            <h1>{data.title}</h1>
+        <div className="max-w-3xl mx-auto p-6 space-y-6 justify-center align-middle">
+            <h1 className="text-2xl font-bold underline underline-offset-2">{data.title}</h1>
             <p>{data.date}</p>
-
-            <p>aca iria content</p>
             <ReactMarkdown>{content}</ReactMarkdown>
         </div>
     );
