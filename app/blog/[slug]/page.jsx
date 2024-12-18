@@ -3,6 +3,7 @@ import fs from "fs";
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 import html from "remark-html";
+import Link from "next/link";
 
 export async function generateStaticParams(){
     const postsDirectory = path.join(process.cwd(), "app", "content", "posts");
@@ -25,10 +26,14 @@ export default async function BlogPost({ params }){
     const { data, content } = matter(fileContents);
 
     return(
-        <div className="max-w-3xl mx-auto p-6 space-y-6 justify-center align-middle">
-            <h1 className="text-2xl font-bold underline underline-offset-2">{data.title}</h1>
+        <div className="max-w-3xl mx-auto p-6 space-y-6">
+
+            <h1 className="text-yellow-100 text-2xl font-bold underline underline-offset-2">{data.title}</h1>
+
             <p>{data.date}</p>
             <ReactMarkdown>{content}</ReactMarkdown>
+
+            <Link href="/blog" className="block mt-8 text-lg transition-all hover:text-yellow-100">Back</Link>
         </div>
     );
 }

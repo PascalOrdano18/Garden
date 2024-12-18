@@ -24,12 +24,12 @@ export default async function BlogPage(){
 
     return (
         <div>
-          <h1 className="text-3xl font-bold">Journal</h1>
+          <h1 className="text-4xl font-bold">Journal</h1>
           <ul>
             {posts.map(({ slug, title, date }) => (
               <li key={slug} className='my-8'>
-                <Link href={`/blog/${slug}`} className='hover:text-yellow-100'>
-                  <h2>{title}</h2>
+                <Link href={`/blog/${slug}`} className='hover:text-yellow-100 transition-all'>
+                  <h2 className='text-lg transition-all'>{title}</h2>
                 </Link>
                 <p>{date}</p>
               </li>
