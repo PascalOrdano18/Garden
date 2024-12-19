@@ -2,7 +2,6 @@ import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
-import html from "remark-html";
 import Link from "next/link";
 
 export async function generateStaticParams(){
