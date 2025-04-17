@@ -1,25 +1,56 @@
 import Link from "next/link"
 import PCard from "../components/PCard";
 
+const projects = [
+    {
+        title: "Discrete Math",
+        image: "/Graph1.png",
+        alt: "A discrete math app",
+        github: "https://github.com/PascalOrdano18/Visual-Discrete-Math",
+        description: "A visual tool for learning discrete mathematics"
+    },
+    {
+        title: "SAT Vocabulary Tutor",
+        image: "/SAT1.png",
+        alt: "SAT vocabulary learning application",
+        github: "https://sat-app.vercel.app/",
+        description: "Interactive vocabulary learning platform"
+    }
+];
 
 export default function Projects(){
     return(
-        <div className="mt-8 p-6 space-y-12 min-h-screen">
-            <h1 className="text-3xl font-bold">PROJECTS</h1>
-            <p>All my projects are public on my github 
-                <Link href="https://github.com/PascalOrdano18" className="hover:text-yellow-100 transition-all"> PascalOrdano18. </Link>
-            Cool things on the way.</p>
+        <div className="min-h-screen w-full">
+            <div className="max-w-7xl mx-auto px-8 py-16">
+                <div className="mb-24">
+                    <h1 className="text-6xl font-bold mb-6">Projects</h1>
+                    <p className="text-gray-400 text-xl">
+                        Find my work on{' '}
+                        <Link 
+                            href="https://github.com/PascalOrdano18" 
+                            className="text-white hover:text-yellow-100 transition-all"
+                            target="_blank"
+                        >
+                            GitHub
+                        </Link>
+                    </p>
+                </div>
 
-            <ul className="space-y-10">
-                <li>
-                    <PCard projectTitle="Discrete Math" imageSource="/Graph1.png" imageAlt="A discrete math app" />
-                </li>
-
-                <li>
-                    <PCard projectTitle="SAT Vocabulary tutor" imageSource="/SAT1.png" imageAlt="A discrete math app" />
-                </li>
-            </ul>
-
+                <div className="space-y-32">
+                    {projects.map((project, index) => (
+                        <div key={index} className="w-full">
+                            <Link href={project.github} target="_blank">
+                                <PCard 
+                                    projectTitle={project.title}
+                                    imageSource={project.image}
+                                    imageAlt={project.alt}
+                                    description={project.description}
+                                />
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

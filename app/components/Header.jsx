@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Header() {
     return(
-        <header className="text-white fixed top-0 w-full bg-black h-16 flex items-center justify-center z-50">
+        <header className="text-white fixed top-0 left-1/2 -translate-x-1/2 w-[98%] bg-black/80 backdrop-blur-sm h-16 flex items-center justify-center z-50 rounded-lg">
                 <nav className="flex space-x-8 text-3xl font-bold">
                     <Link href="/" className="hover:text-yellow-100 transition">HOME</Link>
                     <Link href="/blog" className="hover:text-yellow-100 transition">JOURNAL</Link>

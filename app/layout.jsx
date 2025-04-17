@@ -1,5 +1,6 @@
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import BackToTop from "./components/BackToTop";
 
 import './globals.css';
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
                 <main className="mt-16 p-4">
                     {children}
                 </main>
+                <BackToTop />
                 <Footer />
             </body>
         </html>
