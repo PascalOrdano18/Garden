@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 function ProgressiveText({ text }) {
   const [mounted, setMounted] = useState(false);
@@ -20,11 +20,11 @@ function ProgressiveText({ text }) {
   return (
     <div className="flex flex-col">
       <h1 className="font-bold whitespace-nowrap flex items-start">
-        {text.split('').map((char, index) => {
+        {text.split("").map((char, index) => {
           const fontSize = isForward
-            ? minSize + (index * increment)
-            : maxSize - (index * increment);
-          
+            ? minSize + index * increment
+            : maxSize - index * increment;
+
           return (
             <span
               key={index}
@@ -53,7 +53,8 @@ export default function Home() {
           A place where I share what I create and things that interest me.
         </p>
         <p className="slide-up">
-          I'm a software engineering student at Instituto Tecnologico de Buenos Aires (ITBA)
+          I'm a software engineering student at Instituto Tecnologico de Buenos
+          Aires (ITBA)
         </p>
       </div>
     </div>

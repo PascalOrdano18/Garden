@@ -37,7 +37,14 @@ export default async function BlogPost({ params }){
                 <span>•</span>
                 <p>{readingTime} min read</p>
             </div>
-            <ReactMarkdown className="prose prose-invert max-w-none">{content}</ReactMarkdown>
+            <ReactMarkdown 
+                className="prose prose-invert max-w-none prose-p:my-8 prose-headings:my-8"
+                components={{
+                    p: ({node, ...props}) => <p className="mb-8" {...props} />
+                }}
+            >
+                {content}
+            </ReactMarkdown>
             <Link href="/blog" className="block mt-8 text-lg transition-all hover:text-yellow-100">Back</Link>
         </div>
     );
