@@ -23,4 +23,8 @@ I know this conclussion might be related to this being my first job, but also It
 
 Second realization: *50% of the job is done if it is well defined in the beggining.*
 
+I was told this by a mentor I have before starting the job, I took the advice and try to apply it as I could. I didnt really know how imporant it was. When I started the job, I thought that everything was well defined, I wrote a docs with everything my boss wanted, dos and donts, as specific as I could. But I could have done better, much better. Its not only defining well what your boss tells you, but also you telling your boss where your job ends.
+
+I had many calls and meetings where things changed and I had to re adapt or even delete code that fitted perfeclty for the first iteration of the product. I had to change things from week to week because my boss changed its mind. Im not blaming her, I know its part of working and life, Im blaming me, for not expecting it. This readaptations and new considerations forced me to change my calendar and rearrange my times. I even had to adapt the price at one point, due to the growth the project had. My advice here is to be very clear with what you understand that your user/boss wants, and to be very clear with what you will do. This will save you lots of precious time and useless code.
+
 
