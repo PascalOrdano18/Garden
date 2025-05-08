@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import GitHubActivity from "./components/GitHubActivity";
 
 function ProgressiveText({ text }) {
   const [mounted, setMounted] = useState(false);
@@ -57,7 +56,6 @@ export default function Home() {
           I'm a software engineering student at Instituto Tecnologico de Buenos
           Aires (ITBA)
         </p>
-        <GitHubActivity />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import PCard from "../components/PCard";
+import GitHubActivity from "../components/GitHubActivity";
 
 const projects = [
     {
@@ -22,7 +23,7 @@ export default function Projects(){
     return(
         <div className="min-h-screen w-full">
             <div className="max-w-7xl mx-auto px-8 py-16">
-                <div className="mb-24">
+                <div className="mb-12 text-center">
                     <h1 className="text-6xl font-bold mb-6">Projects</h1>
                     <p className="text-gray-400 text-xl">
                         Find my work on{' '}
@@ -34,6 +35,7 @@ export default function Projects(){
                             GitHub
                         </Link>
                     </p>
+                    <GitHubActivity />
                 </div>
 
                 <div className="space-y-32">
