@@ -1,26 +1,41 @@
 import Link from "next/link"
-import PCard from "../components/PCard";
-import GitHubActivity from "../components/GitHubActivity";
+import PCard from "@/app/components/PCard";
+import GitHubActivity from "@/app/components/GitHubActivity";
 
-const projects = [
+interface Project {
+    title: string;
+    image: string;
+    alt: string;
+    link: string;
+    description: string;
+}
+
+const projects: Project[] = [
     {
         title: "Discrete Math",
         image: "/Graph1.png",
         alt: "A discrete math app",
-        github: "https://github.com/PascalOrdano18/Visual-Discrete-Math",
+        link: "https://github.com/PascalOrdano18/Visual-Discrete-Math",
         description: "A visual tool for learning discrete mathematics"
     },
     {
         title: "SAT Vocabulary Tutor",
         image: "/SAT1.png",
         alt: "SAT vocabulary learning application",
-        github: "https://sat-app.vercel.app/",
+        link: "https://sat-app.vercel.app/",
         description: "Interactive vocabulary learning platform"
+    },
+    {
+        title: "Mini Games",
+        image: "/Graph1.png",
+        alt: "Mini games",
+        link: "/projects/mini_games",
+        description: "A collection of fun mini-games and interactive experiences"
     }
 ];
 
-export default function Projects(){
-    return(
+export default function Projects() {
+    return (
         <div className="min-h-screen w-full">
             <div className="max-w-7xl mx-auto px-8 py-16">
                 <div className="mb-12 text-center">
@@ -41,7 +56,10 @@ export default function Projects(){
                 <div className="space-y-32">
                     {projects.map((project, index) => (
                         <div key={index} className="w-full">
-                            <Link href={project.github} target="_blank">
+                            <Link 
+                                href={project.link} 
+                                target={project.title === 'Mini Games' ? undefined : "_blank"}
+                            >
                                 <PCard 
                                     projectTitle={project.title}
                                     imageSource={project.image}

@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
 
-function ProgressiveText({ text }) {
-  const [mounted, setMounted] = useState(false);
-  const [isForward, setIsForward] = useState(true);
+interface ProgressiveTextProps {
+  text: string;
+}
+
+export default function ProgressiveText({ text }: ProgressiveTextProps) {
+  const [isForward, setIsForward] = useState<boolean>(true);
 
   useEffect(() => {
-    setMounted(true);
     setIsForward(Math.random() > 0.5);
   }, []);
-
-  if (!mounted) return null;
 
   const maxSize = 7;
   const minSize = 1.5;
@@ -33,6 +33,8 @@ function ProgressiveText({ text }) {
                 fontSize: `${fontSize}rem`,
                 animationDelay: `${index * 80}ms`,
                 lineHeight: 0.8,
+                opacity: 0,
+                animation: `simpleReveal 0.5s ease-out ${index * 80}ms forwards`
               }}
             >
               {char}
@@ -42,21 +44,4 @@ function ProgressiveText({ text }) {
       </h1>
     </div>
   );
-}
-
-export default function Home() {
-  return (
-    <div className="fade-in">
-      <div className="justify-items-start space-y-6">
-        <ProgressiveText text="Pascal Ordano's Garden" />
-        <p className="mt-4 text-lg slide-up">
-          A place where I share what I create and things that interest me.
-        </p>
-        <p className="slide-up">
-          I'm a software engineering student at Instituto Tecnologico de Buenos
-          Aires (ITBA)
-        </p>
-      </div>
-    </div>
-  );
-}
+} 

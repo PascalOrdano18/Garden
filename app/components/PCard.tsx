@@ -3,7 +3,14 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function PCard({ projectTitle, imageSource, imageAlt, description }) {
+interface PCardProps {
+    projectTitle: string;
+    imageSource: string;
+    imageAlt: string;
+    description: string;
+}
+
+export default function PCard({ projectTitle, imageSource, imageAlt, description }: PCardProps) {
     const [isHovered, setIsHovered] = useState(false);
 
     return (

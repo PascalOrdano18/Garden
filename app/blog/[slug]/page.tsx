@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown";
 import Link from "next/link";
 import ClientReadingProgress from "../../components/ClientReadingProgress";
 
-function calculateReadingTime(content) {
+function calculateReadingTime(content: string) {
   const wordsPerMinute = 200;
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.ceil(words / wordsPerMinute);
@@ -21,7 +21,7 @@ export async function generateStaticParams(){
       }));    
 }
 
-export default async function BlogPost({ params }){
+export default async function BlogPost({ params }: { params: { slug: string } }){
     const { slug } = await params;
     const filePath = path.join(process.cwd(), "app", "content", "posts", `${slug}.md`);
     const fileContents = fs.readFileSync(filePath, "utf8");

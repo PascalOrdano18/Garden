@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/preflight";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @layer base {
   body {
@@ -21,7 +22,7 @@
 
   .progressive-text {
     opacity: 0;
-    animation: simpleReveal 0s forwards;
+    animation: simpleReveal 0.5s ease-out forwards;
   }
 }
 
@@ -42,5 +43,6 @@
 }
 
 @keyframes simpleReveal {
+  from { opacity: 0; }
   to { opacity: 1; }
 }

@@ -10,7 +10,7 @@ const GITHUB_COLORS = [
     '#39d353', // 10+ contributions
 ];
 
-function getColor(count) {
+function getColor(count: number) {
     if (count === 0) return GITHUB_COLORS[0];
     if (count <= 3) return GITHUB_COLORS[1];
     if (count <= 6) return GITHUB_COLORS[2];
@@ -18,10 +18,31 @@ function getColor(count) {
     return GITHUB_COLORS[4];
 }
 
+interface ContributionDay {
+    date: string;
+    contributionCount: number;
+}
+
+interface Week {
+    contributionDays: ContributionDay[];
+}
+
+interface GitHubResponse {
+    data: {
+        user: {
+            contributionsCollection: {
+                contributionCalendar: {
+                    weeks: Week[];
+                };
+            };
+        };
+    };
+}
+
 export default function GitHubActivity() {
-    const [weeks, setWeeks] = useState([]);
+    const [weeks, setWeeks] = useState<Week[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchContributions = async () => {
@@ -30,13 +51,13 @@ export default function GitHubActivity() {
                 if (!response.ok) {
                     throw new Error(`Failed to fetch: ${response.status}`);
                 }
-                const data = await response.json();
+                const data = await response.json() as GitHubResponse;
                 const weeks = data.data.user.contributionsCollection.contributionCalendar.weeks;
                 setWeeks(weeks);
                 setLoading(false);
-            } catch (error) {
-                console.error('Error fetching GitHub contributions:', error);
-                setError(error.message);
+            } catch (err) {
+                console.error('Error fetching GitHub contributions:', err);
+                setError(err instanceof Error ? err.message : 'An unknown error occurred');
                 setLoading(false);
             }
         };
