@@ -27,7 +27,7 @@ export default function MiniGames() {
                 return (
                     <div key={game.name} className="flex flex-col items-center justify-center">
                         <Link href={`/projects/mini_games/${game.name}`}>
-                            <h2>{game.name}</h2>
+                        <h2>{game.name}</h2>
                         </Link>
                     </div>
                 )
