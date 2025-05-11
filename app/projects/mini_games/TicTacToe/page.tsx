@@ -1,170 +1,163 @@
-'use client';
+"use client"
 
 import { useState } from "react";
+
+
+type Board<T> = T[][];   // Board contiene Moves
 
 const values = {
     cross: "X",
     circle: "O",
-    free: " "
+    free: " ",
 }
 
-class Grid {
-    board: string[];
-    lastValue: string;
-    lastMoveX: number;
-    lastMoveY: number;
-    next: Grid | null;
 
-    constructor(board: string[], lastValue: string, lastMoveX: number, lastMoveY: number, next: Grid | null) {
-        this.board = board;
-        this.lastValue = lastValue;
-        this.lastMoveX = lastMoveX;
-        this.lastMoveY = lastMoveY;
-        this.next = next;
-    }
+class Move{
 
-    checkGame(): boolean {
-        let isFinished = false;
+    value: string;
+    row: number;
+    col: number;
 
-        for(let x = 0; x < 2; x++){
-            if(this.board[x + 3*this.lastMoveY] !== this.lastValue){
-                break;
-            } else {
-                isFinished = true;
-            }
-        }
-        if(isFinished){
-            return true;
-        }
+    lastMove?: Move | null;
+    nextMove?: Move | null;
 
-        for(let y = this.lastMoveY; y < 2; y++){
-            if(this.board[this.lastMoveX + 3*y] !== this.lastValue){
-                break;   
-            } else {
-                isFinished = true;
-            }
-        }
-
-        if(isFinished){
-            return true;
-        }
-        
-        for(let i = 0; i < 2; i++){
-            for(let j = 0; j < 2; j++){
-                if(this.board[i + 3*j] !== this.lastValue){
-                    break;
-                } else {
-                    isFinished = true;
-                }
-            }
-        }
-
-        for(let i = 0; i < 2; i++){
-            for(let j = 2; j > 0; j--){
-                if(this.board[i + 3 * j] !== this.lastValue){
-                    break;
-                } else {
-                    isFinished = true;
-                }
-            }
-        }
-        
-        return isFinished;
+    constructor(value: string, row?: number, col?: number, lastMove?: Move | null, nextMove?: Move | null){
+        this.value = value;
+        this.row = row ?? 0; 
+        this.col = col ?? 0;
+        this.lastMove = lastMove ?? null;
+        this.nextMove = nextMove ?? null; 
     }
 }
+
+function createEmptyBoard(): Board<Move> {
+    return Array.from({ length: 3 }, () =>
+      Array.from({ length: 3 }, () => new Move(values.free))
+    );
+  }
+
+
+function checkWin(board: Board<Move>, move: Move): boolean{
+    let win: boolean = true;
+    for(let y = 0; y < 3; y++){
+        if(board[y][move.col].value !== move.value){
+            win = false;
+        }
+    }
+    if(win){
+        return win;
+    }
+
+    win = true;
+    for(let x = 0; x < 3; x++){
+        if(board[move.row][x].value !== move.value){
+            win = false;
+        }
+    }
+    if(win){
+        return win;
+    } 
+
+    win = true;
+    if((((move.col == 0 || move.col == 2) && (move.row == 0 || move.row == 2)) || (move.col == 1 && move.row == 1))){
+        let x: number = 0;
+        let y: number = 0;
+        while(x <= 2 && y <= 2){
+            if(board[x][y].value !== move.value){
+                win = false;
+            }
+            x++;
+            y++;
+        }   
+        if(win){
+            return win;
+        }
+        win = true;
+        let x2: number = 2;
+        let y2: number = 0;
+
+        while(x2 >= 0 && y2 <= 2){
+            if(board[x2][y2].value !== move.value){
+                win = false;
+            }
+            x2--;
+            y2++;
+        }
+        if(win){
+            return win;
+        } 
+    }
+
+    return false;
+
+}
+
+
 
 export default function TicTacToe() {
-    const [matchType, setMatchType] = useState(true); // true for computer, false for human
-    const [currentGrid, setCurrentGrid] = useState<Grid>(new Grid(Array(9).fill(values.free), values.free, 0, 0, null));
-    const [gameFinished, setGameFinished] = useState(false);
+    const [board, setBoard] = useState<Board<Move>>(createEmptyBoard());
+    const [lastMove, setLastMove] = useState<Move | null>(null);
+    const [changeVal, setChangeVal] = useState(true);
+    const [winner, setWinner] = useState(values.free);
 
-    const handleMove = (index: number) => {
-        if(currentGrid.board[index] !== values.free || gameFinished){
-            return;
+    const handleCellClick = (rowIdx: number, colIdx: number) => {
+       
+        const cell = board[rowIdx][colIdx];
+        if (cell.value !== values.free) return ;
+
+        const newValue = (changeVal ? values.cross : values.circle);
+        setChangeVal(!changeVal);
+
+        // creo nuevo nodo, si habia lastMove (o sea no es el primero), le asigno al anterior.next = newMove
+        const newMove = new Move(newValue, rowIdx, colIdx, lastMove, null);
+        if(lastMove){
+            lastMove.nextMove = newMove;
         }
+        setLastMove(newMove);
 
-        const x = index % 3;
-        const y = Math.floor(index / 3);
-        
-        // Player's move
-        const newBoard = [...currentGrid.board];
-        newBoard[index] = values.cross;
-        
-        // Create new grid for player's move
-        const playerGrid = new Grid(newBoard, values.cross, x, y, currentGrid);
-        
-        // Check if player won
-        if(playerGrid.checkGame()){
-            setGameFinished(true);
-            setCurrentGrid(playerGrid);
-            return;
-        }
 
-        if(matchType) {
-            // Computer's move
-            const freeCells = newBoard.reduce<number[]>((acc, cell, idx) => {
-                if(cell === values.free){
-                    acc.push(idx);
-                }
-                return acc;
-            }, []);
+        const newBoard = board.map((row, r) =>
+            row.map((m, c) => (r === rowIdx && c === colIdx ? newMove : m))
+          );
+        
 
-            if(freeCells.length > 0){
-                const randomIndex = Math.floor(Math.random() * freeCells.length);
-                const computerMove = freeCells[randomIndex];
-                newBoard[computerMove] = values.circle;
-                
-                const computerX = computerMove % 3;
-                const computerY = Math.floor(computerMove / 3);
-                
-                const finalGrid = new Grid(newBoard, values.circle, computerX, computerY, playerGrid);
-                
-                // Check if computer won
-                if(finalGrid.checkGame()){
-                    setGameFinished(true);
-                    setCurrentGrid(finalGrid);
-                    return;
-                }
-                
-                setCurrentGrid(finalGrid);
-            }
-        } else {
-            setCurrentGrid(playerGrid);
-        }
-    };
+          setBoard(newBoard);
+        
+          if (checkWin(newBoard, newMove)) {
+            setWinner(newMove.value);
+          }
+
+        
+
+    }
+
+
+    const handleReset = () => {
+        setBoard(createEmptyBoard());
+        setLastMove(null);
+        setChangeVal(true); // arranque de X siempre bro
+        setWinner(values.free);
+    }
+
+
 
     return (
-        <div className="flex flex-col items-center justify-center">
-            <h1>Tic Tac Toe</h1>
-            <div className="flex flex-row w-full justify-center">
-                <p>Match Type: </p>
-                <button onClick={() => {
-                    setMatchType(!matchType);
-                    setGameFinished(false);
-                    setCurrentGrid(new Grid(Array(9).fill(values.free), values.free, 0, 0, null));
-                }}>{matchType ? "computer" : "human"}</button>
+        <div>
+            <h1 className="text-yellow-100 font-bold text-4xl text-center mb-4">Tic Tac Toe</h1>
+            <div className="grid grid-cols-3">
+                {winner === values.free ? board.map((row, rowIdx) => (
+                    row.map((cellMove, colIdx) => (
+                        <button key={`${rowIdx}-${colIdx}`} onClick={(() => handleCellClick(rowIdx, colIdx)
+                        )} className="w-40 h-40 border border-yellow-100">
+                            <div className="text-yellow-100 font-bold text-4xl">{cellMove.value}</div>
+                        </button>                 
+                
+                ))))
+                 : 
+                    <div className="align-middle justify-center text-yellow-100 font-bold text-4xl text-center mb-4 bg-yellow-100 p-4 rounded-md">{winner.toUpperCase()} wins!</div>
+                    }
             </div>
-
-            <div className="grid grid-cols-3 grid-rows-3">
-                {currentGrid.board.map((cell, index) => (
-                    <div key={index} className="border border-gray-300 w-40 h-40 flex items-center justify-center">
-                        <button 
-                            className="w-40 h-40 text-yellow-100 font-bold text-4xl" 
-                            onClick={() => handleMove(index)}
-                        >
-                            {cell}
-                        </button>
-                    </div>
-                ))}
-
-                <button onClick={() => {
-                    setGameFinished(false);
-                    setCurrentGrid(new Grid(Array(9).fill(values.free), values.free, 0, 0, null));
-                }}>Reset</button>
-            </div>
+            <button onClick={handleReset} className="text-yellow-100 border border-yellow-100 px-4 py-2 rounded-md mt-4 hover:bg-yellow-100 hover:text-black mx-auto block">Reset</button>
         </div>
     )
 }
-
-
-
