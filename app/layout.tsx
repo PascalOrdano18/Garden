@@ -2,6 +2,7 @@ import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
 import BackToTop from "@/app/components/BackToTop";
 import './globals.css';
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata = {
   title: 'Pascals Garden',
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         </main>
         <BackToTop />
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
