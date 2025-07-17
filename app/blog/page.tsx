@@ -7,13 +7,7 @@ interface BlogPost {
     slug: string;
     title: string;
     date: string;
-    [key: string]: any; // for any additional frontmatter fields
-}
-
-interface MatterData {
-    title: string;
-    date: string;
-    [key: string]: any;
+    [key: string]: unknown; // for any additional frontmatter fields
 }
 
 export default async function BlogPage(){

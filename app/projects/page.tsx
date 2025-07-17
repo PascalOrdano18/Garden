@@ -19,6 +19,13 @@ const projects: Project[] = [
         description: "A visual tool for learning discrete mathematics"
     },
     {
+        title: "Archivo 909",
+        image: "/Archivo909.jpeg",
+        alt: "Archivo 909",
+        link: "https://archivo909.vercel.app/",
+        description: "Digital Magazine web site"
+    },
+    {
         title: "SAT Vocabulary Tutor",
         image: "/SAT1.png",
         alt: "SAT vocabulary learning application",
@@ -27,7 +34,7 @@ const projects: Project[] = [
     },
     {
         title: "Mini Games",
-        image: "/Graph1.png",
+        image: "/MiniGames.jpeg",
         alt: "Mini games",
         link: "/projects/mini_games",
         description: "A collection of fun mini-games and interactive experiences"
@@ -53,7 +60,7 @@ export default function Projects() {
                     <GitHubActivity />
                 </div>
 
-                <div className="space-y-32">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {projects.map((project, index) => (
                         <div key={index} className="w-full">
                             <Link 

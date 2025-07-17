@@ -156,7 +156,7 @@ export default function TicTacToe() {
 				{winner === values.free && !tie ? board.map((row, rowIdx) => (
 					row.map((cellMove, colIdx) => (
 						<button key={`${rowIdx}-${colIdx}`} onClick={(() => handleCellClick(rowIdx, colIdx)
-						)} className="w-20 h-20 border border-yellow-100 text-yellow-100 font-bold text-4xl text-center">
+						)} className="w-32 h-32 border border-yellow-100 text-yellow-100 font-bold text-4xl text-center">
 							{cellMove.value}
 						</button>
 					))

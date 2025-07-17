@@ -21,7 +21,7 @@ export async function generateStaticParams(){
       }));    
 }
 
-export default async function BlogPost({ params }: { params: { slug: string } }){
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }){
     const { slug } = await params;
     const filePath = path.join(process.cwd(), "app", "content", "posts", `${slug}.md`);
     const fileContents = fs.readFileSync(filePath, "utf8");
@@ -40,7 +40,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
             <ReactMarkdown 
                 className="prose prose-invert max-w-none prose-p:my-8 prose-headings:my-8"
                 components={{
-                    p: ({node, ...props}) => <p className="mb-8" {...props} />
+                    p: ({...props}) => <p className="mb-8" {...props} />
                 }}
             >
                 {content}
