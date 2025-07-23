@@ -10,6 +10,9 @@ export default function MiniGames() {
         },
         {
             name: "Pong"
+        },
+        {
+            name: "Ultimate"
         }
     ]
 
