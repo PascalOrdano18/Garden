@@ -13,24 +13,33 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
     setIsForward(Math.random() > 0.5);
   }, []);
 
-  const maxSize = 7;
-  const minSize = 1.5;
-  const increment = 0.25;
+  // Responsive font sizes
+  const maxSize = {
+    mobile: 3.5,
+    tablet: 5.5, 
+    desktop: 7
+  };
+  const minSize = {
+    mobile: 1,
+    tablet: 1.25,
+    desktop: 1.5
+  };
+  const increment = {
+    mobile: 0.15,
+    tablet: 0.2,
+    desktop: 0.25
+  };
 
   return (
-    <div className="flex flex-col">
-      <h1 className="font-bold whitespace-nowrap flex items-start">
+    <div className="flex flex-col overflow-hidden">
+      <h1 className="font-bold flex items-start overflow-x-auto scrollbar-hide">
         {text.split("").map((char, index) => {
-          const fontSize = isForward
-            ? minSize + index * increment
-            : maxSize - index * increment;
-
           return (
             <span
               key={index}
-              className="progressive-text inline-flex items-start"
+              className="progressive-text inline-flex items-start flex-shrink-0"
               style={{
-                fontSize: `${fontSize}rem`,
+                fontSize: `clamp(${minSize.mobile + index * increment.mobile}rem, ${minSize.tablet + index * increment.tablet}rem, ${minSize.desktop + index * increment.desktop}rem)`,
                 animationDelay: `${index * 80}ms`,
                 lineHeight: 0.8,
                 opacity: 0,

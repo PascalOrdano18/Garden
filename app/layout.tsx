@@ -18,7 +18,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className="bg-black text-white min-h-screen flex flex-col items-center justify-center">
         <Header />
-        <main className="mt-16 p-4 pb-32">
+        <main className="mt-20 sm:mt-16 p-4 sm:p-6 pb-24 sm:pb-32 w-full max-w-7xl mx-auto">
           {children}
         </main>
         <BackToTop />

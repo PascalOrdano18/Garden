@@ -156,8 +156,8 @@ export default function TicTacToe({
     // Show winner display for won boards
     if (actualIsWon && actualWinner && actualWinner !== values.free) {
         return (
-            <div className="w-48 h-48 border-4 border-yellow-100 flex items-center justify-center">
-                <div className="text-yellow-100 font-bold text-5xl">{actualWinner}</div>
+            <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-yellow-100 flex items-center justify-center">
+                <div className="text-yellow-100 font-bold text-3xl sm:text-4xl md:text-5xl">{actualWinner}</div>
             </div>
         );
     }
@@ -169,14 +169,14 @@ export default function TicTacToe({
 
     return (
         <div>
-            <div className={`${borderClass} p-2`}>
-                <div className="grid grid-cols-3">
+            <div className={`${borderClass} p-1 sm:p-2`}>
+                <div className="grid grid-cols-3 gap-0">
                     {board.map((row, rowIdx) => (
                         row.map((cellMove, colIdx) => (
                             <button
                                 key={`${rowIdx}-${colIdx}`}
                                 onClick={() => handleCellClick(rowIdx, colIdx)}
-                                className="w-16 h-16 border border-yellow-100 text-yellow-100 font-bold text-2xl text-center hover:bg-yellow-100 hover:bg-opacity-10 disabled:hover:bg-transparent"
+                                className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 border border-yellow-100 text-yellow-100 font-bold text-lg sm:text-xl md:text-2xl text-center hover:bg-yellow-100 hover:bg-opacity-10 disabled:hover:bg-transparent touch-manipulation"
                                 disabled={actualIsWon || (!isActive && externalBoard !== undefined)}
                             >
                                 {cellMove.value}
@@ -190,7 +190,7 @@ export default function TicTacToe({
             {showResetButton && !externalBoard && (
                 <button 
                     onClick={handleReset} 
-                    className="text-yellow-100 border border-yellow-100 px-4 py-2 rounded-md mt-4 hover:bg-yellow-100 hover:text-black mx-auto block"
+                    className="text-yellow-100 border border-yellow-100 px-3 py-2 sm:px-4 sm:py-2 rounded-md mt-3 sm:mt-4 hover:bg-yellow-100 hover:text-black mx-auto block text-sm sm:text-base touch-manipulation"
                 >
                     Reset
                 </button>
