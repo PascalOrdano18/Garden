@@ -1,69 +1,145 @@
 "use client"
-import TicTacToeGame from "@/app/components/TicTacToeGame";
-import { useState } from "react";
 
+import { useState } from "react";
+import TicTacToeGame, { Move, createEmptyBoard, checkWin, values, Board } from "@/app/components/TicTacToeGame";
+
+function checkUltimateWin(winners: string[], player: string): boolean {
+    const winPatterns = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+        [0, 4, 8], [2, 4, 6] // diagonals
+    ];
+
+    return winPatterns.some(pattern => 
+        pattern.every(index => winners[index] === player)
+    );
+}
 
 export default function Ultimate() {
-
+    // State for all 9 small tic-tac-toe boards
     const [smallBoards, setSmallBoards] = useState<Board<Move>[]>(
-        Array.from({length: 9}, () => createEmptyBoard())
+        Array.from({ length: 9 }, () => createEmptyBoard())
     );
 
+    // Which board can be played on (null = any open board)
     const [activeBoardIndex, setActiveBoardIndex] = useState<number | null>(null);
+    
+    // Winners of each small board (values.free = not won yet)
     const [smallBoardWinners, setSmallBoardWinners] = useState<string[]>(
         Array(9).fill(values.free)
     );
     
+    // Current player (X or O)
     const [currentPlayer, setCurrentPlayer] = useState(values.cross);
+    
+    // Winner of the overall Ultimate game
+    const [gameWinner, setGameWinner] = useState<string>(values.free);
 
     const handleMove = (boardIndex: number, row: number, col: number) => {
+        // Can't make moves if game is over
+        if (gameWinner !== values.free) return;
+
+        // 1. Update the specific small board
         const newSmallBoards = [...smallBoards];
-        const newMove = new Move(currentPlayer, 0 , row, col);
-        newSmallBoards[boardIndex][row][col] = newMove;
+        const newMove = new Move(currentPlayer, 0, row, col);
+        newSmallBoards[boardIndex] = newSmallBoards[boardIndex].map((boardRow, r) =>
+            boardRow.map((cell, c) => (r === row && c === col ? newMove : cell))
+        );
         setSmallBoards(newSmallBoards);
 
-        if (checkUltimateWin(newWinners, currentPlayer)) {
-            // Game over!
-        return;
+        // 2. Check if this small board is now won
+        const newSmallBoardWinners = [...smallBoardWinners];
+        if (checkWin(newSmallBoards[boardIndex], newMove)) {
+            newSmallBoardWinners[boardIndex] = currentPlayer;
+            setSmallBoardWinners(newSmallBoardWinners);
+            
+            // 3. Check if overall game is won
+            if (checkUltimateWin(newSmallBoardWinners, currentPlayer)) {
+                setGameWinner(currentPlayer);
+                return; // Game over!
+            }
         }
 
+        // 4. Determine next active board based on the move position
         const nextBoardIndex = row * 3 + col;
-        const nextActive = smallBoardWinners[nextBoardIndex] === values.free
-        ? nextBoardIndex 
-        : null;
+        const nextActive = newSmallBoardWinners[nextBoardIndex] === values.free
+            ? nextBoardIndex  // Player must play in this specific board
+            : null;           // If target board is won/full, player can choose any open board
 
         setActiveBoardIndex(nextActive);
+
+        // 5. Switch to the other player
         setCurrentPlayer(currentPlayer === values.cross ? values.circle : values.cross);
-    }
+    };
 
-    
-    const checkUltimateWin = (winners: string[], player: number) => {
-        const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-            [0, 4, 8], [2, 4, 6] // diagonals
-        ];
-
-        return winPatterns.some(pattern => 
-            pattern.every(index => winners[index] === player)
-        );
-    }
+    const handleReset = () => {
+        setSmallBoards(Array.from({ length: 9 }, () => createEmptyBoard()));
+        setSmallBoardWinners(Array(9).fill(values.free));
+        setCurrentPlayer(values.cross);
+        setGameWinner(values.free);
+        setActiveBoardIndex(null);
+    };
 
     return (
-        <div>
-            <div className="grid grid-cols-3 gap-4 m-20">
+        <div className="flex flex-col items-center">
+            {/* Game Over Display */}
+            {gameWinner !== values.free && (
+                <div className="mb-4 text-3xl font-bold text-yellow-100">
+                    🎉 {gameWinner} Wins Ultimate Tic-Tac-Toe! 🎉
+                </div>
+            )}
+            
+            {/* Current Game Status */}
+            <div className="mb-6 text-xl text-yellow-100">
+                Current Player: <span className="font-bold text-2xl">{currentPlayer}</span>
+                {activeBoardIndex !== null && gameWinner === values.free && (
+                    <span className="ml-4 text-orange-400">Must play in board {activeBoardIndex + 1}</span>
+                )}
+                {activeBoardIndex === null && gameWinner === values.free && (
+                    <span className="ml-4 text-green-400">Can play in any open board</span>
+                )}
+            </div>
+
+            {/* The 3x3 grid of smaller tic-tac-toe games */}
+            <div className="grid grid-cols-3 gap-3 p-6">
                 {Array.from({ length: 9 }).map((_, i) => (
-                    <TicTacToeGame 
-                        key={i}
-                        boardIndex={i}
-                        isActive={activeBoardIndex === null || activeBoardIndex === i}
-                        isWon={smallBoardWinners[i] !== values.free}
-                        onMove={handleMove}
-                        board={smallBoards[i]}
-                        currentPlayer={currentPlayer}
-                        showResetButton={false}
-                    />
+                    <div key={i} className="relative">
+                        {/* Board number indicator */}
+                        <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 text-yellow-100 font-bold text-base">
+                            {i + 1}
+                        </div>
+                        
+                        <TicTacToeGame 
+                            boardIndex={i}
+                            isActive={activeBoardIndex === null || activeBoardIndex === i}
+                            isWon={smallBoardWinners[i] !== values.free}
+                            winner={smallBoardWinners[i]}
+                            onMove={handleMove}
+                            board={smallBoards[i]}
+                            currentPlayer={currentPlayer}
+                            showResetButton={false}
+                        />
+                    </div>
                 ))}
+            </div>
+
+            {/* Reset Button */}
+            <button 
+                onClick={handleReset}
+                className="text-yellow-100 border border-yellow-100 px-4 py-2 rounded-md mt-4 hover:bg-yellow-100 hover:text-black"
+            >
+                Reset Game
+            </button>
+
+            {/* Game Rules */}
+            <div className="mt-4 max-w-xl text-yellow-100 text-center">
+                <h3 className="text-lg font-bold mb-2">Ultimate Tic-Tac-Toe Rules:</h3>
+                <ul className="text-xs space-y-1">
+                    <li>• Win small boards to claim them for the big board</li>
+                    <li>• Your move determines which board your opponent plays in next</li>
+                    <li>• If sent to a won board, you can play anywhere</li>
+                    <li>• Win 3 small boards in a row to win the ultimate game!</li>
+                </ul>
             </div>
         </div>
     );
