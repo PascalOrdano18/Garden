@@ -13,21 +13,21 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
     setIsForward(Math.random() > 0.5);
   }, []);
 
-  // Responsive font sizes
+  // More conservative responsive font sizes for better mobile experience
   const minSize = {
-    mobile: 1,
-    tablet: 1.25,
-    desktop: 1.5
+    mobile: 0.8,
+    tablet: 1,
+    desktop: 1.2
   };
   const increment = {
-    mobile: 0.15,
-    tablet: 0.2,
-    desktop: 0.25
+    mobile: 0.08,
+    tablet: 0.12,
+    desktop: 0.18
   };
 
   return (
-    <div className="flex flex-col overflow-hidden">
-      <h1 className="font-bold flex items-start overflow-x-auto scrollbar-hide">
+    <div className="flex flex-col overflow-hidden w-full">
+      <h1 className="font-bold flex flex-wrap items-center justify-start leading-tight">
         {text.split("").map((char, index) => {
           // Calculate responsive font size with forward/backward logic
           const baseSize = isForward ? index : (text.length - 1 - index);
@@ -35,19 +35,23 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
           const tabletSize = minSize.tablet + baseSize * increment.tablet;
           const desktopSize = minSize.desktop + baseSize * increment.desktop;
 
+          // Add word break after spaces for better wrapping
+          const isSpace = char === ' ';
+
           return (
             <span
               key={index}
-              className="progressive-text inline-flex items-start flex-shrink-0"
+              className={`progressive-text inline-flex items-center ${isSpace ? 'flex-shrink-0' : 'flex-shrink-0'}`}
               style={{
                 fontSize: `clamp(${mobileSize}rem, ${tabletSize}rem, ${desktopSize}rem)`,
-                animationDelay: `${index * 80}ms`,
-                lineHeight: 0.8,
+                animationDelay: `${index * 60}ms`,
+                lineHeight: 1,
                 opacity: 0,
-                animation: `simpleReveal 0.5s ease-out ${index * 80}ms forwards`
+                animation: `simpleReveal 0.4s ease-out ${index * 60}ms forwards`,
+                wordBreak: isSpace ? 'break-all' : 'normal'
               }}
             >
-              {char}
+              {char === ' ' ? '\u00A0' : char}
             </span>
           );
         })}
