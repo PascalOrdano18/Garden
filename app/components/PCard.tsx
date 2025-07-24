@@ -19,11 +19,11 @@ export default function PCard({ projectTitle, imageSource, imageAlt, description
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className="mb-6">
-                <h2 className="text-3xl font-medium tracking-tight mb-2">
+            <div className="mb-4 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium tracking-tight mb-2 leading-tight">
                     {projectTitle}
                 </h2>
-                <p className="text-gray-500 text-base">{description}</p>
+                <p className="text-gray-500 text-sm sm:text-base leading-relaxed">{description}</p>
             </div>
 
             <div className="overflow-hidden rounded-lg border border-gray-800 bg-black/20">
@@ -33,14 +33,14 @@ export default function PCard({ projectTitle, imageSource, imageAlt, description
                         src={imageSource}
                         alt={imageAlt}
                         fill
-                        sizes="100vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         priority
                         quality={95}
                     />
                     <div className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-100'}`} />
                     
-                    <div className={`absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                        <p className="text-white text-lg font-medium">
+                    <div className={`absolute bottom-0 left-0 right-0 p-4 sm:p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                        <p className="text-white text-base sm:text-lg font-medium">
                             View Project →
                         </p>
                     </div>

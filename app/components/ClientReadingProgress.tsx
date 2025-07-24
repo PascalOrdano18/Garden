@@ -20,9 +20,9 @@ export default function ClientReadingProgress() {
   }, []);
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[98%] h-1 bg-gray-800/50 rounded-t-lg overflow-hidden">
+    <div className="fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 w-[95%] sm:w-[98%] max-w-4xl h-1 sm:h-1.5 bg-gray-800/50 rounded-full overflow-hidden z-50">
       <div
-        className="h-full bg-yellow-100 transition-all duration-150"
+        className="h-full bg-yellow-100 transition-all duration-150 rounded-full"
         style={{ width: `${progress}%` }}
       />
     </div>

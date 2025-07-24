@@ -14,11 +14,6 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
   }, []);
 
   // Responsive font sizes
-  const maxSize = {
-    mobile: 3.5,
-    tablet: 5.5, 
-    desktop: 7
-  };
   const minSize = {
     mobile: 1,
     tablet: 1.25,
@@ -34,12 +29,18 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
     <div className="flex flex-col overflow-hidden">
       <h1 className="font-bold flex items-start overflow-x-auto scrollbar-hide">
         {text.split("").map((char, index) => {
+          // Calculate responsive font size with forward/backward logic
+          const baseSize = isForward ? index : (text.length - 1 - index);
+          const mobileSize = minSize.mobile + baseSize * increment.mobile;
+          const tabletSize = minSize.tablet + baseSize * increment.tablet;
+          const desktopSize = minSize.desktop + baseSize * increment.desktop;
+
           return (
             <span
               key={index}
               className="progressive-text inline-flex items-start flex-shrink-0"
               style={{
-                fontSize: `clamp(${minSize.mobile + index * increment.mobile}rem, ${minSize.tablet + index * increment.tablet}rem, ${minSize.desktop + index * increment.desktop}rem)`,
+                fontSize: `clamp(${mobileSize}rem, ${tabletSize}rem, ${desktopSize}rem)`,
                 animationDelay: `${index * 80}ms`,
                 lineHeight: 0.8,
                 opacity: 0,

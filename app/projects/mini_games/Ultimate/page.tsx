@@ -81,31 +81,42 @@ export default function Ultimate() {
     };
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center p-4 sm:p-6 lg:p-8 min-h-screen">
+            {/* Page Title */}
+            <h1 className="text-yellow-100 font-bold text-2xl sm:text-3xl lg:text-4xl text-center mb-4 sm:mb-6">
+                Ultimate Tic-Tac-Toe
+            </h1>
+
             {/* Game Over Display */}
             {gameWinner !== values.free && (
-                <div className="mb-4 text-3xl font-bold text-yellow-100">
+                <div className="mb-4 sm:mb-6 text-xl sm:text-2xl lg:text-3xl font-bold text-yellow-100 text-center px-4">
                     🎉 {gameWinner} Wins Ultimate Tic-Tac-Toe! 🎉
                 </div>
             )}
             
             {/* Current Game Status */}
-            <div className="mb-6 text-xl text-yellow-100">
-                Current Player: <span className="font-bold text-2xl">{currentPlayer}</span>
+            <div className="mb-4 sm:mb-6 text-center px-4">
+                <div className="text-base sm:text-lg lg:text-xl text-yellow-100 mb-2">
+                    Current Player: <span className="font-bold text-lg sm:text-xl lg:text-2xl">{currentPlayer}</span>
+                </div>
                 {activeBoardIndex !== null && gameWinner === values.free && (
-                    <span className="ml-4 text-orange-400">Must play in board {activeBoardIndex + 1}</span>
+                    <div className="text-sm sm:text-base text-orange-400">
+                        Must play in board {activeBoardIndex + 1}
+                    </div>
                 )}
                 {activeBoardIndex === null && gameWinner === values.free && (
-                    <span className="ml-4 text-green-400">Can play in any open board</span>
+                    <div className="text-sm sm:text-base text-green-400">
+                        Can play in any open board
+                    </div>
                 )}
             </div>
 
             {/* The 3x3 grid of smaller tic-tac-toe games */}
-            <div className="grid grid-cols-3 gap-3 p-6">
+            <div className="grid grid-cols-3 gap-1 sm:gap-2 lg:gap-3 p-2 sm:p-4 lg:p-6 max-w-full overflow-hidden">
                 {Array.from({ length: 9 }).map((_, i) => (
                     <div key={i} className="relative">
                         {/* Board number indicator */}
-                        <div className="absolute -top-7 left-1/2 transform -translate-x-1/2 text-yellow-100 font-bold text-base">
+                        <div className="absolute -top-5 sm:-top-6 lg:-top-7 left-1/2 transform -translate-x-1/2 text-yellow-100 font-bold text-xs sm:text-sm lg:text-base">
                             {i + 1}
                         </div>
                         
@@ -126,15 +137,15 @@ export default function Ultimate() {
             {/* Reset Button */}
             <button 
                 onClick={handleReset}
-                className="text-yellow-100 border border-yellow-100 px-4 py-2 rounded-md mt-4 hover:bg-yellow-100 hover:text-black"
+                className="text-yellow-100 border border-yellow-100 px-4 py-2 sm:px-6 sm:py-3 rounded-md mt-4 sm:mt-6 hover:bg-yellow-100 hover:text-black transition-all text-sm sm:text-base touch-manipulation"
             >
                 Reset Game
             </button>
 
             {/* Game Rules */}
-            <div className="mt-4 max-w-xl text-yellow-100 text-center">
-                <h3 className="text-lg font-bold mb-2">Ultimate Tic-Tac-Toe Rules:</h3>
-                <ul className="text-xs space-y-1">
+            <div className="mt-4 sm:mt-6 max-w-xl text-yellow-100 text-center px-4">
+                <h3 className="text-base sm:text-lg font-bold mb-2 sm:mb-3">Ultimate Tic-Tac-Toe Rules:</h3>
+                <ul className="text-xs sm:text-sm space-y-1 sm:space-y-2 text-left">
                     <li>• Win small boards to claim them for the big board</li>
                     <li>• Your move determines which board your opponent plays in next</li>
                     <li>• If sent to a won board, you can play anywhere</li>
