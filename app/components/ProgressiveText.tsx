@@ -30,7 +30,7 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
               key={index}
               className="progressive-text inline-flex items-start"
               style={{
-                fontSize: `${fontSize}rem`,
+                fontSize: `min(${fontSize}rem, ${fontSize * 0.5}vw)`,
                 animationDelay: `${index * 80}ms`,
                 lineHeight: 0.8,
                 opacity: 0,
