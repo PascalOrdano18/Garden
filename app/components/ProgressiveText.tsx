@@ -13,13 +13,13 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
     setIsForward(Math.random() > 0.5);
   }, []);
 
-  const maxSize = 7;
-  const minSize = 1.5;
-  const increment = 0.25;
+  const maxSize = 12;
+  const minSize = 3;
+  const increment = 0.4;
 
   return (
     <div className="flex flex-col">
-      <h1 className="font-bold whitespace-nowrap flex items-start overflow-x-auto scrollbar-hide">
+      <h1 className="font-bold whitespace-nowrap flex items-start overflow-hidden scrollbar-hide">
         {text.split("").map((char, index) => {
           const fontSize = isForward
             ? minSize + index * increment
@@ -30,11 +30,12 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
               key={index}
               className="progressive-text inline-flex items-start"
               style={{
-                fontSize: `min(${fontSize}rem, ${fontSize * 0.5}vw)`,
+                fontSize: `min(${fontSize}rem, ${fontSize * 0.6}vw)`,
                 animationDelay: `${index * 80}ms`,
                 lineHeight: 0.8,
                 opacity: 0,
-                animation: `simpleReveal 0.5s ease-out ${index * 80}ms forwards`
+                animation: `simpleReveal 0.5s ease-out ${index * 80}ms forwards`,
+                marginRight: `${fontSize * 0.05}rem`
               }}
             >
               {char}
