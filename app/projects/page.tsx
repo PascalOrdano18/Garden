@@ -38,6 +38,13 @@ const projects: Project[] = [
         alt: "Mini games",
         link: "/projects/mini_games",
         description: "A collection of fun mini-games and interactive experiences"
+    },
+    {
+        title: "Graphs on React",
+        image: "/MiniGames.jpeg",
+        alt: "Graphs",
+        link: "/projects/graphs",
+        description: "Graph theory done on React with TS and Next to keep on learning"
     }
 ];
 
