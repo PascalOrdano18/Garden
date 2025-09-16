@@ -28,7 +28,7 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
           return (
             <span
               key={index}
-              className="progressive-text inline-flex items-start"
+              className="progressive-text inline-flex items-start hover:text-yellow-100 hover:cursor-pointer hover:text-4xl"
               style={{
                 fontSize: `min(${fontSize}rem, ${fontSize * 0.6}vw)`,
                 animationDelay: `${index * 80}ms`,

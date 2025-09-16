@@ -20,7 +20,7 @@ export default function PCard({ projectTitle, imageSource, imageAlt, description
             onMouseLeave={() => setIsHovered(false)}
         >
             <div className="mb-4 sm:mb-6">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium tracking-tight mb-2 leading-tight">
+                <h2 className={`text-xl sm:text-2xl lg:text-3xl font-medium tracking-tight mb-2 leading-tight ${isHovered ? "text-yellow-100" : ""}`}>
                     {projectTitle}
                 </h2>
                 <p className="text-gray-500 text-sm sm:text-base leading-relaxed">{description}</p>
