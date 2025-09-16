@@ -68,7 +68,6 @@ function checkWin(board: Board<Move>, move: Move): boolean {
 
     // Check diagonals (only if move is on a diagonal)
     if (move.row === move.col || move.row + move.col === 2) {
-        // Main diagonal
         win = true;
         for (let i = 0; i < 3; i++) {
             if (board[i][i].value !== move.value) {
