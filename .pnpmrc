@@ -1,0 +1,10 @@
+# Enable build scripts globally
+enable-pre-post-scripts=true
+auto-install-peers=true
+
+# Allow all packages to run scripts (this will resolve the sharp and unrs-resolver warnings)
+ignore-scripts=false
+
+# Alternative: If you want to be more specific, you can use:
+# But for Vercel deployment, it's safer to allow all scripts
+unsafe-perm=true
