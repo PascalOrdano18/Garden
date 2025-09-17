@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type LetterStatus = "correct" | "incorrect" | "current" | "pending";
 
@@ -19,24 +19,44 @@ const texts = [
 export default function Type() {
   const [input, setInput] = useState<string>('');
   const [finish, setFinish] = useState<boolean>(false);
-  const [correctLetter, setCorrectLetter] = useState<boolean>(false);
   const [currentId, setCurrentId] = useState<number>(0);
   const [color, setColor] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
+  const [strokesAmount, setStrokesAmount] = useState<number>(0);
+
+  const startTimerRef = useRef<number | null>(null);
+  const timerIdRef = useRef<number | null>(null);
+
 
   useEffect(() => {
     const idx: number = Math.floor(Math.random() * (texts.length));
     setText(texts[idx].text);
+
+    return () => {
+      if (timerIdRef.current !== null) {
+        clearInterval(timerIdRef.current);
+      }
+    }
   }, []);
 
+
+  const startTimer = () => {
+    startTimerRef.current = performance.now();
+  }
+
   const handleChange = (value: string): void => {
+    if(startTimerRef.current == null && input.length > 0){
+      startTimer();
+    }
     setInput(value);
+    timerIdRef.current = performance.now();
     setCurrentId(value.length - 1);
     if (text.charAt(value.length - 1) === value.charAt(value.length - 1)) {
       setColor(true);
     } else {
       setColor(false);
     }
+    setStrokesAmount(strokesAmount + 1);
     setFinish(text === value);
   }
 
@@ -46,21 +66,23 @@ export default function Type() {
     setColor(false);
     setFinish(false);
     setCurrentId(0);
+    setStrokesAmount(0);
     setInput('');
+    startTimerRef.current = null;
   }
 
 
-  const getStatuses = (text: string, input: string) : LetterStatus[] => {
+  const getStatuses = (text: string, input: string): LetterStatus[] => {
     const res: LetterStatus[] = [];
-    for(let i = 0; i < text.length; i++){
-        const typed = input[i];
-        if(typed == null){
-            res.push(i === input.length ? "current" : "pending");
-        } else {
-            res.push(typed === text[i] ? "correct" : "incorrect");
-        }
+    for (let i = 0; i < text.length; i++) {
+      const typed = input[i];
+      if (typed == null) {
+        res.push(i === input.length ? "current" : "pending");
+      } else {
+        res.push(typed === text[i] ? "correct" : "incorrect");
+      }
     }
-    return res; 
+    return res;
   }
 
   const statuses = getStatuses(text, input);
@@ -79,9 +101,9 @@ export default function Type() {
       <h1 className="text-3xl">TYPING TEST</h1>
       <div className="w-full my-10">
         {Array.from(text).map((char, i) => (
-            <span key={i} className={`text-2xl ${classFor(statuses[i])}`}>
-                {char}
-            </span>
+          <span key={i} className={`text-2xl ${classFor(statuses[i])}`}>
+            {char}
+          </span>
         ))}
       </div>
       <textarea
@@ -91,10 +113,10 @@ export default function Type() {
         onChange={(e) => handleChange(e.target.value)}
       />
 
-      {finish &&
+      {finish && timerIdRef.current &&
         <div>
           <h1 className="text-3xl font-extrabold text-blue-500">FINISHED!</h1>
-          <h3>WPM: 100 (mentira)</h3>
+          <h3>WPM: {strokesAmount / timerIdRef.current}</h3>
         </div>
       }
 
