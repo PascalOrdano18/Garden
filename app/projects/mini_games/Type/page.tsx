@@ -25,18 +25,12 @@ export default function Type() {
   const [strokesAmount, setStrokesAmount] = useState<number>(0);
 
   const startTimerRef = useRef<number | null>(null);
-  const timerIdRef = useRef<number | null>(null);
+  const endTimerRef = useRef<number | null>(null);
 
 
   useEffect(() => {
     const idx: number = Math.floor(Math.random() * (texts.length));
     setText(texts[idx].text);
-
-    return () => {
-      if (timerIdRef.current !== null) {
-        clearInterval(timerIdRef.current);
-      }
-    }
   }, []);
 
 
@@ -45,23 +39,26 @@ export default function Type() {
   }
 
   const handleChange = (value: string): void => {
-    if(startTimerRef.current == null && input.length > 0){
+    if(value.length > text.length) return ;
+    if(startTimerRef.current == null && value.length > 0){
       startTimer();
     }
     setInput(value);
-    timerIdRef.current = performance.now();
     setCurrentId(value.length - 1);
     if (text.charAt(value.length - 1) === value.charAt(value.length - 1)) {
       setColor(true);
     } else {
       setColor(false);
     }
-    setStrokesAmount(strokesAmount + 1);
-    setFinish(text === value);
+    setStrokesAmount(prev => prev + 1);
+    if (value === text && startTimerRef.current !== null) {
+      endTimerRef.current = performance.now(); 
+      setFinish(true);
+    }
   }
 
   const reset = () => {
-    const idx: number = Math.floor(Math.random() * (texts.length - 1));
+    const idx: number = Math.floor(Math.random() * texts.length);
     setText(texts[idx].text);
     setColor(false);
     setFinish(false);
@@ -69,6 +66,7 @@ export default function Type() {
     setStrokesAmount(0);
     setInput('');
     startTimerRef.current = null;
+    endTimerRef.current = null;
   }
 
 
@@ -113,10 +111,15 @@ export default function Type() {
         onChange={(e) => handleChange(e.target.value)}
       />
 
-      {finish && timerIdRef.current &&
+      {finish && startTimerRef.current && endTimerRef.current &&
         <div>
           <h1 className="text-3xl font-extrabold text-blue-500">FINISHED!</h1>
-          <h3>WPM: {strokesAmount / timerIdRef.current}</h3>
+          {(() => {
+            const elapsedMs = endTimerRef.current - startTimerRef.current;
+            const minutes = Math.max(elapsedMs / 60000, 1e-6);
+            const wpm = Math.round((text.length / 5) / minutes);
+            return <h3>WPM: {wpm}</h3>;
+          })()}
         </div>
       }
 
