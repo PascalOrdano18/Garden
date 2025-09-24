@@ -51,7 +51,7 @@ export default function Type() {
       setColor(false);
     }
     setStrokesAmount(prev => prev + 1);
-    if (value === text && startTimerRef.current !== null) {
+    if (value.length === text.length && startTimerRef.current !== null) {
       endTimerRef.current = performance.now(); 
       setFinish(true);
     }
@@ -118,7 +118,14 @@ export default function Type() {
             const elapsedMs = endTimerRef.current - startTimerRef.current;
             const minutes = Math.max(elapsedMs / 60000, 1e-6);
             const wpm = Math.round((text.length / 5) / minutes);
-            return <h3>WPM: {wpm}</h3>;
+            const accuracy = (text.length / strokesAmount) * 100;
+            return (
+              <div>
+                <h3>WPM: {wpm}</h3>
+                <h3>Strokes: {strokesAmount}</h3>
+                <h3>Accuracy: {accuracy.toFixed(2)} %</h3>  
+              </div>
+              )
           })()}
         </div>
       }
