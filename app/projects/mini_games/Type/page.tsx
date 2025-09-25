@@ -27,12 +27,10 @@ export default function Type() {
   const startTimerRef = useRef<number | null>(null);
   const endTimerRef = useRef<number | null>(null);
 
-
   useEffect(() => {
     const idx: number = Math.floor(Math.random() * (texts.length));
     setText(texts[idx].text);
   }, []);
-
 
   const startTimer = () => {
     startTimerRef.current = performance.now();
@@ -68,7 +66,6 @@ export default function Type() {
     startTimerRef.current = null;
     endTimerRef.current = null;
   }
-
 
   const getStatuses = (text: string, input: string): LetterStatus[] => {
     const res: LetterStatus[] = [];
@@ -122,6 +119,7 @@ export default function Type() {
             return (
               <div>
                 <h3>WPM: {wpm}</h3>
+                <h3>Time: {(minutes * 60).toFixed(2)}</h3>
                 <h3>Strokes: {strokesAmount}</h3>
                 <h3>Accuracy: {accuracy.toFixed(2)} %</h3>  
               </div>
@@ -135,7 +133,6 @@ export default function Type() {
         className="text-yellow-100 border border-yellow-100 px-4 py-2 sm:px-6 sm:py-3 rounded-md mt-4 sm:mt-6 hover:bg-yellow-100 hover:text-black transition-all text-sm sm:text-base touch-manipulation">
         RESET
       </button>
-
     </div>
   );
 }

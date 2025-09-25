@@ -1,6 +1,8 @@
 import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
 import BackToTop from "@/app/components/BackToTop";
+import BackgroundShaders from "@/app/components/BackgroundShaders";
+import { BackgroundProvider } from "@/app/contexts/BackgroundContext";
 import './globals.css';
 import { Analytics } from "@vercel/analytics/next"
 
@@ -17,12 +19,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className="bg-black text-white min-h-screen flex flex-col items-center justify-center">
-        <Header />
-        <main className="mt-16 p-4 pb-16 sm:pb-20">
-          {children}
-        </main>
-        <BackToTop />
-        <Footer />
+        <BackgroundProvider>
+          <BackgroundShaders />
+          <Header />
+          <main className="mt-16 p-4 pb-16 sm:pb-20">
+            {children}
+          </main>
+          <BackToTop />
+          <Footer />
+        </BackgroundProvider>
         <Analytics />
       </body>
     </html>

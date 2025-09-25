@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@paper-design/shaders-react": "^0.0.54",
     "@vercel/analytics": "^1.5.0",
     "gray-matter": "^4.0.3",
     "next": "^15.5.3",
