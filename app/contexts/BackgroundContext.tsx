@@ -1,23 +1,34 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface BackgroundContextType {
   isFixed: boolean;
   toggleFixed: () => void;
+  isJournalPage: boolean;
 }
 
 const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
 
 export function BackgroundProvider({ children }: { children: ReactNode }) {
   const [isFixed, setIsFixed] = useState(false);
+  const pathname = usePathname();
+  const isJournalPage = pathname?.startsWith('/blog') || false;
+
+  useEffect(() => {
+    // Auto-fix background when on journal pages
+    if (isJournalPage) {
+      setIsFixed(true);
+    }
+  }, [isJournalPage]);
 
   const toggleFixed = () => {
     setIsFixed(!isFixed);
   };
 
   return (
-    <BackgroundContext.Provider value={{ isFixed, toggleFixed }}>
+    <BackgroundContext.Provider value={{ isFixed, toggleFixed, isJournalPage }}>
       {children}
     </BackgroundContext.Provider>
   );

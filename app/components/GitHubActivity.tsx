@@ -74,7 +74,7 @@ export default function GitHubActivity() {
 
     if (error) {
         return (
-            <div className="w-full max-w-4xl mx-auto mt-4 sm:mt-8 p-4 sm:p-6 bg-black/30 backdrop-blur-sm rounded-lg">
+            <div className="w-full max-w-4xl mx-auto mt-4 sm:mt-8 p-4 sm:p-6">
                 <p className="text-red-400 text-sm sm:text-base">Unable to load GitHub activity: {error}</p>
                 <p className="text-gray-400 mt-2 text-sm sm:text-base">Please check if the API route is working and try again later.</p>
             </div>
@@ -90,22 +90,25 @@ export default function GitHubActivity() {
     );
 
     return (
-        <div className="w-full max-w-4xl mx-auto mt-4 sm:mt-8 p-4 sm:p-6 bg-black/30 backdrop-blur-sm rounded-lg pt-8 sm:pt-12 lg:pt-20">
+        <div className="w-full max-w-4xl mx-auto mt-4 sm:mt-8 p-4 sm:p-6 pt-8 sm:pt-12 lg:pt-20">
             <div className="overflow-x-auto">
                 <div className="inline-block min-w-full">
-                    <div className="grid gap-[1px] sm:gap-[2px]" style={{ gridTemplateColumns: `repeat(${numCols}, minmax(0, 1fr))`, gridTemplateRows: `repeat(7, minmax(0, 1fr))` }}>
-                        {grid.map((row, rowIdx) =>
-                            row.map((day, colIdx) => (
-                                <div
-                                    key={`${rowIdx}-${colIdx}`}
-                                    className="w-2 h-2 sm:w-3 sm:h-3 rounded-sm cursor-pointer hover:ring-1 hover:ring-gray-400 transition-all"
-                                    style={{
-                                        backgroundColor: getColor(day ? day.contributionCount : 0),
-                                    }}
-                                    title={day ? `${day.date}: ${day.contributionCount} contributions` : ''}
-                                />
-                            ))
-                        )}
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-lg"></div>
+                        <div className="relative grid gap-[1px] sm:gap-[2px] p-2" style={{ gridTemplateColumns: `repeat(${numCols}, minmax(0, 1fr))`, gridTemplateRows: `repeat(7, minmax(0, 1fr))` }}>
+                            {grid.map((row, rowIdx) =>
+                                row.map((day, colIdx) => (
+                                    <div
+                                        key={`${rowIdx}-${colIdx}`}
+                                        className="w-2 h-2 sm:w-3 sm:h-3 rounded-sm cursor-pointer hover:ring-1 hover:ring-gray-400 transition-all"
+                                        style={{
+                                            backgroundColor: getColor(day ? day.contributionCount : 0),
+                                        }}
+                                        title={day ? `${day.date}: ${day.contributionCount} contributions` : ''}
+                                    />
+                                ))
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

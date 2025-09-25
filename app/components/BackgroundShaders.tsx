@@ -25,7 +25,7 @@ const shaderConfigs = [
   },
   {
     shape: "corners" as const,
-    colors: ["#000000", "#ffffff", "#000000", "#ffffff"],
+    colors: ["#ffffff", "#000000", "#ffffff", "#000000"],
     colorBack: "#000000",
     softness: 0.8,
     intensity: 0.5,
@@ -45,7 +45,7 @@ const shaderConfigs = [
 
 export default function BackgroundShaders() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { isFixed } = useBackground();
+  const { isFixed, isJournalPage } = useBackground();
 
   useEffect(() => {
     if (isFixed) return;
@@ -57,7 +57,15 @@ export default function BackgroundShaders() {
     return () => clearInterval(interval);
   }, [isFixed]);
 
-  const currentConfig = shaderConfigs[currentIndex];
+  // Use corners (index 1) as default for journal pages
+  const getCurrentIndex = () => {
+    if (isJournalPage && isFixed) {
+      return 1; // corners effect (DEFAULT)
+    }
+    return currentIndex;
+  };
+
+  const currentConfig = shaderConfigs[getCurrentIndex()];
 
   return (
     <div className="fixed inset-0 -z-10">
