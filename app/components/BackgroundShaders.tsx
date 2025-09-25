@@ -57,12 +57,6 @@ export default function BackgroundShaders() {
     return () => clearInterval(interval);
   }, [isFixed]);
 
-  if (isFixed) {
-    return (
-      <div className="fixed inset-0 -z-10 bg-black" />
-    );
-  }
-
   const currentConfig = shaderConfigs[currentIndex];
 
   return (
@@ -76,7 +70,7 @@ export default function BackgroundShaders() {
         intensity={currentConfig.intensity}
         noise={currentConfig.noise}
         shape={currentConfig.shape}
-        speed={currentConfig.speed}
+        speed={isFixed ? 0 : currentConfig.speed}
         fit="cover"
       />
     </div>

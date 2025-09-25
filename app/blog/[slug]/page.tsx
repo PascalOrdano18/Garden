@@ -3,7 +3,6 @@ import fs from "fs";
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
-import ClientReadingProgress from "../../components/ClientReadingProgress";
 
 function calculateReadingTime(content: string) {
   const wordsPerMinute = 200;
@@ -30,7 +29,6 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
     return(
         <div className="max-w-3xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6 fade-in">
-            <ClientReadingProgress />
             <h1 className="text-yellow-100 text-xl sm:text-2xl font-bold underline underline-offset-2">{data.title}</h1>
             <div className="flex items-center space-x-4 text-xs sm:text-sm text-gray-400">
                 <p>{data.date}</p>
