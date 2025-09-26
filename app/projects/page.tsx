@@ -12,18 +12,18 @@ interface Project {
 
 const projects: Project[] = [
     {
-        title: "Discrete Math",
-        image: "/Graph1.png",
-        alt: "A discrete math app",
-        link: "https://github.com/PascalOrdano18/Visual-Discrete-Math",
-        description: "A visual tool for learning discrete mathematics"
-    },
-    {
         title: "Archivo 909",
         image: "/Archivo909.jpeg",
         alt: "Archivo 909",
-        link: "https://archivo909.vercel.app/",
+        link: "https://archivo909.com/",
         description: "Digital Magazine web site"
+    },
+    {
+        title: "Chat With Your Journal",
+        image: "/ChatWithYourJournal.png",
+        alt: "Chat With Your Journal application",
+        link: "https://chat-with-your-journal.vercel.app/journal",
+        description: "AI-powered journaling companion for personal reflection and growth"
     },
     {
         title: "SAT Vocabulary Tutor",
@@ -39,6 +39,14 @@ const projects: Project[] = [
         link: "/projects/mini_games",
         description: "A collection of fun mini-games and interactive experiences"
     },
+    {
+        title: "Discrete Math",
+        image: "/Graph1.png",
+        alt: "A discrete math app",
+        link: "https://github.com/PascalOrdano18/Visual-Discrete-Math",
+        description: "A visual tool for learning discrete mathematics"
+    },
+    
 ];
 
 export default function Projects() {
