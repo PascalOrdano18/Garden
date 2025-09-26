@@ -26,6 +26,13 @@ const projects: Project[] = [
         description: "AI-powered journaling companion for personal reflection and growth"
     },
     {
+        title: "ITBA's ASME web site",
+        image: "/asme.png",
+        alt: "ITBA's ASME web site",
+        link: "https://asme-web-page.vercel.app/",
+        description: "ITBA's ASME web site"
+    },
+    {
         title: "SAT Vocabulary Tutor",
         image: "/SAT1.png",
         alt: "SAT vocabulary learning application",
