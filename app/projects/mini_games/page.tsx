@@ -9,9 +9,6 @@ export default function MiniGames() {
             name: "TicTacToe"
         },
         {
-            name: "Pong"
-        },
-        {
             name: "Ultimate"
         },
         {
