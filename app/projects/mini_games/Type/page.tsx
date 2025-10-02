@@ -13,7 +13,8 @@ const texts = [
   },
   {
     text: "Que linda mirada y que linda boca, te lo tenia que decir. Gracias, ojala igual. Dale, dale dale"
-  }
+  },
+
 ]
 
 export default function Type() {
@@ -24,6 +25,8 @@ export default function Type() {
   const [text, setText] = useState<string>('');
   const [strokesAmount, setStrokesAmount] = useState<number>(0);
 
+  const [poem, setPoem] = useState("");
+
   const startTimerRef = useRef<number | null>(null);
   const endTimerRef = useRef<number | null>(null);
 
@@ -31,6 +34,24 @@ export default function Type() {
     const idx: number = Math.floor(Math.random() * (texts.length));
     setText(texts[idx].text);
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('api/games/type', {
+          cache: 'no-store'
+        });
+        if(!res.ok)
+          console.log(res.status);
+        
+        const data = await res.json();
+        console.log(data[0]);
+        // setPoem(data);
+      } catch(error){
+        console.log(error);
+      }
+    })
+  });
 
   const startTimer = () => {
     startTimerRef.current = performance.now();
@@ -94,6 +115,7 @@ export default function Type() {
   return (
     <div className="flex flex-col items-center w-full">
       <h1 className="text-3xl">TYPING TEST</h1>
+      <h1>{poem}</h1>
       <div className="w-full my-10">
         {Array.from(text).map((char, i) => (
           <span key={i} className={`text-2xl ${classFor(statuses[i])}`}>
