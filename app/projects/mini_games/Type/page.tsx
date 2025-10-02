@@ -4,18 +4,18 @@ import { useState, useEffect, useRef } from "react";
 
 type LetterStatus = "correct" | "incorrect" | "current" | "pending";
 
-const texts = [
-  {
-    text: "Aprender a tipear rapido es clave para codear"
-  },
-  {
-    text: "Cuando cuentes cuentos cuenta cuantos cuentos cuentas porque sino nunca sabras cuantos cuantos sabes contar"
-  },
-  {
-    text: "Que linda mirada y que linda boca, te lo tenia que decir. Gracias, ojala igual. Dale, dale dale"
-  },
+// const texts = [
+//   {
+//     text: "Aprender a tipear rapido es clave para codear"
+//   },
+//   {
+//     text: "Cuando cuentes cuentos cuenta cuantos cuentos cuentas porque sino nunca sabras cuantos cuantos sabes contar"
+//   },
+//   {
+//     text: "Que linda mirada y que linda boca, te lo tenia que decir. Gracias, ojala igual. Dale, dale dale"
+//   },
 
-]
+// ]
 
 export default function Type() {
   const [input, setInput] = useState<string>('');
@@ -30,28 +30,41 @@ export default function Type() {
   const startTimerRef = useRef<number | null>(null);
   const endTimerRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    const idx: number = Math.floor(Math.random() * (texts.length));
-    setText(texts[idx].text);
-  }, []);
+  // useEffect(() => {
+  //   const idx: number = Math.floor(Math.random() * (texts.length));
+  //   setText(texts[idx].text);
+  // }, []);
 
   useEffect(() => {
     (async () => {
-      try {
-        const res = await fetch('api/games/type', {
-          cache: 'no-store'
-        });
-        if(!res.ok)
-          console.log(res.status);
-        
-        const data = await res.json();
-        console.log(data[0]);
-        // setPoem(data);
-      } catch(error){
-        console.log(error);
+      await getPoem();
+    })();
+  }, []);
+
+  const getPoem = async () => {
+    try {
+      const res = await fetch('/api/games/type', {
+        cache: 'no-store'
+      });
+      if(!res.ok){
+        console.log(res.status);
+        return;
       }
-    })
-  });
+      
+      const data = await res.json();
+      const lines = Array.isArray(data) && data[0]?.lines ? data[0].lines : [];
+      const joined = Array.isArray(lines) ? lines.join(' ') : '';
+
+      if (joined) {
+        const value = joined.slice(0, 200);
+        setPoem(value);
+        setText(value);
+      }
+    
+    } catch(error){
+      console.log(error);
+    }
+  }
 
   const startTimer = () => {
     startTimerRef.current = performance.now();
@@ -77,8 +90,7 @@ export default function Type() {
   }
 
   const reset = () => {
-    const idx: number = Math.floor(Math.random() * texts.length);
-    setText(texts[idx].text);
+    
     setColor(false);
     setFinish(false);
     setCurrentId(0);
@@ -86,6 +98,7 @@ export default function Type() {
     setInput('');
     startTimerRef.current = null;
     endTimerRef.current = null;
+    getPoem();
   }
 
   const getStatuses = (text: string, input: string): LetterStatus[] => {
@@ -115,7 +128,6 @@ export default function Type() {
   return (
     <div className="flex flex-col items-center w-full">
       <h1 className="text-3xl">TYPING TEST</h1>
-      <h1>{poem}</h1>
       <div className="w-full my-10">
         {Array.from(text).map((char, i) => (
           <span key={i} className={`text-2xl ${classFor(statuses[i])}`}>
