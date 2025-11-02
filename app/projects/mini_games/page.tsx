@@ -13,6 +13,9 @@ export default function MiniGames() {
         },
         {
             name: "Type"
+        },
+        {
+            name: "Graphs"
         }
     ]
 

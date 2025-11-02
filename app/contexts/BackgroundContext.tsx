@@ -18,9 +18,9 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Auto-fix background when on journal pages
-    if (isJournalPage) {
+    // if (isJournalPage) {
       setIsFixed(true);
-    }
+    // }
   }, [isJournalPage]);
 
   const toggleFixed = () => {
