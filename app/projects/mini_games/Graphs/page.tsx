@@ -2,6 +2,7 @@
 
 import { Node } from "./types";
 import { useState, useEffect, useRef } from 'react';
+import BFS from "./algorithms/bfs";
  
 
 
@@ -17,6 +18,8 @@ const populate = (nodeAmount: number, containerWidth: number, containerHeight: n
 			neighbours: [],
 			x: Math.random() * maxX,
 			y: Math.random() * maxY,
+			status: 'notVisited',
+			state: false,
 		}
 		graph.push(node);
 	}
@@ -42,7 +45,7 @@ export default function Graphs(){
 	const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
+	const setGraph = () => {
 		if (!containerRef.current) return;
 		
 		const containerRect = containerRef.current.getBoundingClientRect();
@@ -52,6 +55,9 @@ export default function Graphs(){
 		const population = Math.floor(Math.random() * 5) + 3;
 
 		setNodes(populate(population, containerWidth, containerHeight));
+	}	
+	useEffect(() => {
+		setGraph();
 	}, []);
 
 	const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>, nodeId: number) => {
@@ -72,6 +78,26 @@ export default function Graphs(){
 		});
 		setDraggedNode(nodeId);
 	}
+
+	// Runner: consume pasos emitidos por BFS (callback) y re-renderiza con delay
+	const runBFS = async () => {
+		// resetear estados visuales antes de correr
+		setNodes(prev => prev.map(n => ({ ...n, status: 'notVisited' })));
+
+		const steps: Array<{ type: 'enqueue' | 'visit'; nodeId: number }> = [];
+		BFS(nodes, (step) => {
+			steps.push(step);
+		});
+
+		for (const step of steps) {
+			setNodes(prev => prev.map(n =>
+				n.id === step.nodeId
+					? { ...n, status: step.type === 'visit' ? 'visited' : 'visiting' }
+					: n
+			));
+			await new Promise(res => setTimeout(res, 250));
+		}
+	};
 
 	const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
 		if(draggedNode === null || !containerRef.current) return;
@@ -101,6 +127,10 @@ export default function Graphs(){
 			<h1 className="text-4xl text-white mb-8">
 				GRAPHS
 			</h1>
+			<div className="w-full m-2">
+				<button className="bg-black p-2 rounded-lg w-40 hover:text-yellow-100 transition-all mx-2" onClick={setGraph}>New Graph</button>
+				<button className="bg-black p-2 rounded-lg w-40 hover:text-yellow-100 transition-all mx-2" onClick={runBFS}>BFS</button>
+			</div>
 
 			<div 
 				ref={containerRef}
@@ -135,13 +165,24 @@ export default function Graphs(){
 
 					<div 
 						key={node.id} 
-						className="absolute bg-black rounded-full w-12 h-12 flex items-center justify-center cursor-move z-10"
+						className="absolute rounded-full w-12 h-12 flex items-center justify-center cursor-move z-10"
 						style={{
+							background: `${node.state ? "blue" : "black"}`,
 							left: `${node.x ?? 0}px`,
 							top: `${node.y ?? 0}px`,
 							zIndex: draggedNode === node.id ? 50 : 10
 						}}
 						onMouseDown={(e) => handleMouseDown(e, node.id)}
+						onClick={(e) => {
+							e.stopPropagation();
+							setNodes(prevNodes => 
+								prevNodes.map(thisNode => 
+									thisNode.id === node.id 
+										? {...thisNode, state: !thisNode.state} 
+										: thisNode
+								)
+							);
+						}}
 					>
 						<span className="text-white font-bold pointer-events-none">{node.id + 1}</span>
 					</div>
