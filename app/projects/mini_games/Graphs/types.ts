@@ -10,7 +10,7 @@ export type Node = {
     state: boolean,
 }
 
-type Status = 'visited' | 'visiting' | 'notVisited';
+export type Status = 'visited' | 'visiting' | 'notVisited';
 
 export type Graph = {
     nodes: Map<number, Node> // Mapa de ID -> Node para acceso rápido

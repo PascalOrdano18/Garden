@@ -1,41 +1,42 @@
-import { Graph, Node } from "../types";
+import { Graph, Node, Status } from "../types";
 // deberia usar el tipo Graph directamente, despues cambiarlo
 
-// Callback por paso: opcional y no modifica la lógica del BFS si no se provee
-type BFSStep =
-  | { type: "enqueue"; nodeId: number }
-  | { type: "visit"; nodeId: number };
+export type BFSStep = {
+    status: Exclude<Status, 'notVisited'>;
+    nodeId: number;
+};
 
 export default function BFS(graph: Node[], onStep?: (step: BFSStep) => void){
     
-    let visited: number[] = [];    // Array de Node IDs ya visitados
-    let nextNodes: number[] = [];  // array de vecinos de nodos ya visitados, en orden de visita FIFO
+    const visited = new Set<number>();    // Set de Node IDs ya visitados (más eficiente)
+    const nextNodes: number[] = [];  // array de vecinos de nodos ya visitados, en orden de visita FIFO
 
+    // Elijo el primer nodo random, después quiero darle la posibilidad al user de elegir
+    if(graph.length === 0) return;
+    const firstNodeIndex = Math.floor(Math.random() * graph.length);
+    const firstNode = graph[firstNodeIndex];
+    if(!firstNode) return;
 
-    const firstNodeId = Math.floor(Math.random() * graph.length);   // elijo el primer nodo random, despues quiero darle al posibilidad al user de elegir
-
-    const firstNode = graph.find(n => n.id === firstNodeId);
-    if(!firstNode) return ;
-    nextNodes.push(firstNodeId);
-    onStep?.({ type: "enqueue", nodeId: firstNodeId });
+    nextNodes.push(firstNode.id);
+    visited.add(firstNode.id); // Marcar como visitado (en la cola)
+    onStep?.({ status: 'visiting', nodeId: firstNode.id });
 
     while(nextNodes.length > 0){
-        const currentNode = graph.find(n => n.id === nextNodes[0]);
-        if(!currentNode) return ;
-        currentNode.status = 'visited';
-        onStep?.({ type: "visit", nodeId: currentNode.id });
-        visited.push(nextNodes[0]);
-        nextNodes.shift();
-
+        const currentNodeId = nextNodes.shift()!;
+        const currentNode = graph.find(n => n.id === currentNodeId);
+        if(!currentNode) continue; // Saltar si el nodo no existe
         
+        onStep?.({ status: 'visited', nodeId: currentNodeId });
 
-        currentNode.neighbours.map((neighbourId) => {
-            nextNodes.push(neighbourId);
-            const neighbourNode = graph.find(n => n.id === neighbourId);
-            if(!neighbourNode) return ;
-            neighbourNode.status = 'visiting';
-            onStep?.({ type: "enqueue", nodeId: neighbourId });
-        })
+        // Procesar todos los vecinos
+        for(const neighbourId of currentNode.neighbours){
+            // Solo agregar si no ha sido visitado y no está ya en la cola
+            if(!visited.has(neighbourId)){
+                visited.add(neighbourId);
+                nextNodes.push(neighbourId);
+                onStep?.({ status: 'visiting', nodeId: neighbourId });
+            }
+        }
     }
 }
 

@@ -2,7 +2,7 @@
 
 import { Node } from "./types";
 import { useState, useEffect, useRef } from 'react';
-import BFS from "./algorithms/bfs";
+import BFS, { BFSStep } from "./algorithms/bfs";
  
 
 
@@ -84,7 +84,7 @@ export default function Graphs(){
 		// resetear estados visuales antes de correr
 		setNodes(prev => prev.map(n => ({ ...n, status: 'notVisited' })));
 
-		const steps: Array<{ type: 'enqueue' | 'visit'; nodeId: number }> = [];
+		const steps: BFSStep[] = [];
 		BFS(nodes, (step) => {
 			steps.push(step);
 		});
@@ -92,7 +92,7 @@ export default function Graphs(){
 		for (const step of steps) {
 			setNodes(prev => prev.map(n =>
 				n.id === step.nodeId
-					? { ...n, status: step.type === 'visit' ? 'visited' : 'visiting' }
+					? { ...n, status: step.status }
 					: n
 			));
 			await new Promise(res => setTimeout(res, 250));
@@ -124,17 +124,19 @@ export default function Graphs(){
 
 	return(
 		<div className="w-full">
-			<h1 className="text-4xl text-white mb-8">
-				GRAPHS
-			</h1>
-			<div className="w-full m-2">
-				<button className="bg-black p-2 rounded-lg w-40 hover:text-yellow-100 transition-all mx-2" onClick={setGraph}>New Graph</button>
-				<button className="bg-black p-2 rounded-lg w-40 hover:text-yellow-100 transition-all mx-2" onClick={runBFS}>BFS</button>
+			<div className="flex flex-col items-center justify-center">
+				<h1 className="text-4xl text-white mb-8">
+					GRAPHS
+				</h1>
+				<div className="w-full m-2 flex flex-row items-center justify-center">
+					<button className="bg-black p-2 rounded-lg w-40 hover:text-yellow-100 transition-all mx-2" onClick={setGraph}>New Graph</button>
+					<button className="bg-black p-2 rounded-lg w-40 hover:text-yellow-100 transition-all mx-2" onClick={runBFS}>BFS</button>
+				</div>
 			</div>
 
 			<div 
 				ref={containerRef}
-				className="relative w-[calc(100vw-2rem)] max-w-none h-[800px] border border-gray-700 rounded-lg -mx-4"
+				className="relative bg-black opacity-70 w-[calc(100vw-2rem)] max-w-none h-[800px] border border-gray-700 rounded-lg -mx-4"
 				style={{ width: 'calc(100vw - 2rem)' }}
 				onMouseMove={handleMouseMove}
 				onMouseUp={() => setDraggedNode(null)}
@@ -167,22 +169,12 @@ export default function Graphs(){
 						key={node.id} 
 						className="absolute rounded-full w-12 h-12 flex items-center justify-center cursor-move z-10"
 						style={{
-							background: `${node.state ? "blue" : "black"}`,
+							background: `${!node.state ? "blue" : "black"}`,
 							left: `${node.x ?? 0}px`,
 							top: `${node.y ?? 0}px`,
 							zIndex: draggedNode === node.id ? 50 : 10
 						}}
 						onMouseDown={(e) => handleMouseDown(e, node.id)}
-						onClick={(e) => {
-							e.stopPropagation();
-							setNodes(prevNodes => 
-								prevNodes.map(thisNode => 
-									thisNode.id === node.id 
-										? {...thisNode, state: !thisNode.state} 
-										: thisNode
-								)
-							);
-						}}
 					>
 						<span className="text-white font-bold pointer-events-none">{node.id + 1}</span>
 					</div>
