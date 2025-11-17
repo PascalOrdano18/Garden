@@ -6,7 +6,6 @@ export default function WriteOrDie(){
 	
 	const [input, setInput] = useState<string>('');
 	const startTimerRef = useRef<number | null>(null);
-	const endTimerRef = useRef<number | null>(null);
 	
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();

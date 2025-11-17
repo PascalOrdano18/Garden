@@ -20,12 +20,8 @@ type LetterStatus = "correct" | "incorrect" | "current" | "pending";
 export default function Type() {
   const [input, setInput] = useState<string>('');
   const [finish, setFinish] = useState<boolean>(false);
-  const [currentId, setCurrentId] = useState<number>(0);
-  const [color, setColor] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [strokesAmount, setStrokesAmount] = useState<number>(0);
-
-  const [poem, setPoem] = useState("");
 
   const startTimerRef = useRef<number | null>(null);
   const endTimerRef = useRef<number | null>(null);
@@ -57,7 +53,6 @@ export default function Type() {
 
       if (joined) {
         const value = joined.slice(0, 200);
-        setPoem(value);
         setText(value);
       }
     
@@ -76,12 +71,6 @@ export default function Type() {
       startTimer();
     }
     setInput(value);
-    setCurrentId(value.length - 1);
-    if (text.charAt(value.length - 1) === value.charAt(value.length - 1)) {
-      setColor(true);
-    } else {
-      setColor(false);
-    }
     setStrokesAmount(prev => prev + 1);
     if (value.length === text.length && startTimerRef.current !== null) {
       endTimerRef.current = performance.now(); 
@@ -90,10 +79,7 @@ export default function Type() {
   }
 
   const reset = () => {
-    
-    setColor(false);
     setFinish(false);
-    setCurrentId(0);
     setStrokesAmount(0);
     setInput('');
     startTimerRef.current = null;

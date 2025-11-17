@@ -1,4 +1,4 @@
-import { Graph, Node, Status } from "../types";
+import { Node, Status } from "../types";
 // deberia usar el tipo Graph directamente, despues cambiarlo
 
 export type BFSStep = {

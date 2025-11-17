@@ -25,9 +25,9 @@ const populate = (nodeAmount: number, containerWidth: number, containerHeight: n
 	}
 
 	for(let i = 0; i < nodeAmount; i++){
-		let neighboursAmount = Math.floor(Math.random() * 4); // max3 neighbours por ahora
+		const neighboursAmount = Math.floor(Math.random() * 4); // max3 neighbours por ahora
 		for(let j = 0; j < neighboursAmount; j++){
-			let neighbourId = Math.floor(Math.random() * 10);
+			const neighbourId = Math.floor(Math.random() * 10);
 			if(i !== neighbourId && !graph[neighbourId]?.neighbours.includes(i) && !graph[i].neighbours.includes(neighbourId)){
 				graph[i]?.neighbours?.push(neighbourId);
 				graph[neighbourId]?.neighbours?.push(i);
