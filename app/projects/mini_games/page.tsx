@@ -16,8 +16,11 @@ export default function MiniGames() {
         },
         {
             name: "Graphs"
-        }
-    ]
+        },
+	{
+		name: "WriteOrDie"
+	},
+    ]	
 
     return (
         <div className="flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
