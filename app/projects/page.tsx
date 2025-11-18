@@ -40,20 +40,12 @@ const projects: Project[] = [
         description: "Interactive vocabulary learning platform"
     },
     {
-        title: "Mini Games",
+        title: "Coding for fun",
         image: "/MiniGames.jpeg",
         alt: "Mini games",
         link: "/projects/mini_games",
         description: "A collection of fun mini-games and interactive experiences"
     },
-    {
-        title: "Discrete Math",
-        image: "/Graph1.png",
-        alt: "A discrete math app",
-        link: "https://github.com/PascalOrdano18/Visual-Discrete-Math",
-        description: "A visual tool for learning discrete mathematics"
-    },
-    
 ];
 
 export default function Projects() {
