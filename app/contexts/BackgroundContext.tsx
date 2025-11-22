@@ -15,10 +15,11 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
   const [isFixed, setIsFixed] = useState(false);
   const pathname = usePathname();
   const isJournalPage = pathname?.startsWith('/blog') || false;
+  const isWriteOrDiePage = pathname?.endsWith('/WriteOrDie') || false;
 
   useEffect(() => {
     // Auto-fix background when on journal pages
-    if (isJournalPage) {
+    if (isJournalPage || isWriteOrDiePage) {
       setIsFixed(true);
     }
   }, [isJournalPage]);
