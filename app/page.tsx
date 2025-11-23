@@ -6,17 +6,23 @@ import { useState, useEffect } from 'react';
 export default function Home() {
     
     const [btcValue, setBtcValue] = useState<string | null>(null);
+    const [ethValue, setEthValue] = useState<string | null>(null);
 
     useEffect(() => {
-        getBtcValue();
+        getCryptoValues();
     });
     
 
-    const getBtcValue = async () => {
-        const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'); 
-        if(!res.ok) return ;
-        const data = await res.json();
+    const getCryptoValues = async () => {
+        const resBtc = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'); 
+        if(!resBtc.ok) return ;
+        let data = await resBtc.json();
         setBtcValue(data.bitcoin.usd);
+
+        const resEth = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+        if(!resEth.ok) return ;
+        data = await resEth.json();
+        setEthValue(data.ethereum.usd);
     }
 
 
@@ -32,10 +38,11 @@ export default function Home() {
           Aires (ITBA)
         </p>
 
-        {btcValue && (
-            <p className='text-center'>
-                BTC at ${btcValue} usd btw
-            </p>
+        {btcValue && ethValue && (
+            <ul>
+                <li>BTC at <span className='text-yellow-100'>${btcValue}</span></li>
+                <li>ETH at <span className='text-yellow-100'>${ethValue}</span></li>
+            </ul>
         )}
         
       </div>

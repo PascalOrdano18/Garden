@@ -7,10 +7,10 @@ interface BlogPost {
     slug: string;
     title: string;
     date: string;
-    [key: string]: unknown; // for any additional frontmatter fields
-}
+    [key: string]: unknown; }
 
 export default async function BlogPage(){
+
     const postsDirectory = path.join(process.cwd(), "app", "content", "posts");  // agarra el directorio /content/posts
     const fileNames = fs.readdirSync(postsDirectory);  // Lee los nombres de los archivos de la carpeta
 
@@ -31,6 +31,7 @@ export default async function BlogPage(){
             ...data,  // el operador ... devuelve todos los elementos del objeto
         }
     })
+
 
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
