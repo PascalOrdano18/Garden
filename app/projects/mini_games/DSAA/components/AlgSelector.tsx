@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import ListsImpl from "../algs/lists/listsImpl";
 
 type AlgSelectorProps = {
   files: string[];
@@ -37,6 +38,12 @@ export default function AlgSelector({ files }: AlgSelectorProps) {
           <p className="italic">Select an algorithm to begin.</p>
         )}
       </div>
+
+      {alg === "lists" && (
+        <div className="w-full mt-6">
+          <ListsImpl />
+        </div>
+      )}
     </div>
   );
 }
