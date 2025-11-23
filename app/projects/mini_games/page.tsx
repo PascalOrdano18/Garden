@@ -15,7 +15,7 @@ export default function MiniGames() {
             name: "Type"
         },
         {
-            name: "Graphs"
+            name: "DSAA"
         },
       	{
 		        name: "WriteOrDie"
