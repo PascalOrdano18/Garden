@@ -1,15 +1,12 @@
 'use client';
 
+import { useParams } from 'next/navigation';
 import { ART_PIECES } from '../../pieces';
 
-interface ArtPageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default function Art({ params }: ArtPageProps) {
-  const piece = ART_PIECES.find((p) => p.slug === params.slug);
+export default function Art() {
+  const params = useParams<{ slug: string }>();
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+  const piece = ART_PIECES.find((p) => p.slug === slug);
 
   if (!piece) {
     return (

@@ -4,6 +4,7 @@
 import type { ComponentType } from "react";
 
 import Random from './pieces/random';
+import Lines from './pieces/lines';
 
 export type ArtComponent = ComponentType<{ isPreview?: boolean }>;
 
@@ -13,6 +14,12 @@ export const ART_PIECES = [
     title: "Random",
     description: "Una pieza de arte generativo aleatorio.",
     Component: Random,
+  },
+  {
+    slug: "Lines",
+    title: "Try it",
+    description: "Testing art",
+    Component: Lines,
   },
 ];
 
