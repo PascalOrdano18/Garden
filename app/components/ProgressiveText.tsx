@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import Link from "next/link";       
 
 interface ProgressiveTextProps {
   text: string;
@@ -38,7 +39,12 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
                 marginRight: `${fontSize * 0.05}rem`
               }}
             >
-              {char}
+              {char === 'G' ? 
+                <Link href={'/projects/mini_games/GenerativeArt'}>{char}</Link>
+              : char === 'P' ? 
+                <Link href={'/projects'}>{char}</Link>
+              : char
+              }
             </span>
           );
         })}
