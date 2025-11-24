@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 const NASA_API_URL = "https://api.nasa.gov/planetary/apod";
 
 export async function GET(){
-     const apiKey = process.env.NASA_API_KEY;
+     const apiKey = process.env.NEXT_PUBLIC_NASA_API_KEY;
 
     try {
         const res = await fetch(`${NASA_API_URL}?api_key=${apiKey}`, {

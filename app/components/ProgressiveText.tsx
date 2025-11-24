@@ -43,6 +43,8 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
                 <Link href={'/projects/mini_games/GenerativeArt'}>{char}</Link>
               : char === 'P' ? 
                 <Link href={'/projects'}>{char}</Link>
+              : char === "'" ?
+                <Link href={'/random-place'}>{char}</Link>
               : char
               }
             </span>
