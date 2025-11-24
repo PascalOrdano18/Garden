@@ -22,7 +22,7 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
     if (isJournalPage || isWriteOrDiePage) {
       setIsFixed(true);
     }
-  }, [isJournalPage]);
+  }, [isJournalPage, isWriteOrDiePage]);
 
   const toggleFixed = () => {
     setIsFixed(!isFixed);

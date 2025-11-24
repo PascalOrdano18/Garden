@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { time } from 'console';
+
 export default function Lines({ isPreview }: { isPreview?: boolean }){
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -11,9 +11,7 @@ export default function Lines({ isPreview }: { isPreview?: boolean }){
         const ctx = canvas.getContext("2d");
         if(!ctx) return ;
 
-        let frame: number;
-
-        const draw = (time: number) => {
+        const draw = () => {
               const rect = canvas.getBoundingClientRect();
               canvas.width = rect.width;
               canvas.height = rect.height;
@@ -51,10 +49,9 @@ export default function Lines({ isPreview }: { isPreview?: boolean }){
                     }
                 }
                 ctx.stroke();
-              //frame = requestAnimationFrame(draw);
         };
 
-        frame = requestAnimationFrame(draw);
+        const frame = requestAnimationFrame(draw);
         return () => cancelAnimationFrame(frame);
       }, [isPreview]);
             
