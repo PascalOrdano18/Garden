@@ -19,8 +19,11 @@ export default function MiniGames() {
             name: "DSAA"
         },
       	{
-		        name: "WriteOrDie"
-	      },
+          name: "WriteOrDie"
+        },
+        {
+          name: "GenerativeArt"
+        },
     ]	
 
     return (
