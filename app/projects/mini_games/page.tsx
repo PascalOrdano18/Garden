@@ -1,7 +1,6 @@
 'use client';
 
 import Link from "next/link";
-import Nasa from "../../blog/helpers/nasa";
 
 export default function MiniGames() {
 
@@ -16,24 +15,20 @@ export default function MiniGames() {
             name: "Type"
         },
         {
-            name: "DSAA"
+            name: "Graphs"
         },
       	{
-          name: "WriteOrDie"
-        },
-        {
-          name: "GenerativeArt"
-        },
+		        name: "WriteOrDie"
+	      },
+          {
+            name: "GenerativeArt"
+          },
     ]	
 
     return (
         <div className="flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
             <h1 className="text-3xl sm:text-4xl font-bold text-yellow-100 mb-3 sm:mb-4 text-center">Mini Projects</h1>
             <p className="text-yellow-100 mb-6 sm:mb-8 text-center text-sm sm:text-base">A collection of fun mini projects</p>
-            
-            <div className="mb-8">
-                <Nasa />
-            </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-4xl w-full">
                 {games.map((game) => (
