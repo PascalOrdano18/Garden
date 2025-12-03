@@ -18,11 +18,11 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className="bg-black text-white min-h-screen flex flex-col items-center justify-center">
+      <body className="bg-black text-white min-h-screen flex flex-col items-center justify-start sm:justify-center">
         <BackgroundProvider>
           <BackgroundShaders />
           <Header />
-          <main className="mt-16 p-4 pb-16 sm:pb-20">
+          <main className="mt-14 sm:mt-16 p-4 pb-16 sm:pb-20">
             {children}
           </main>
           <BackToTop />

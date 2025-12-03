@@ -9,18 +9,31 @@ interface ProgressiveTextProps {
 
 export default function ProgressiveText({ text }: ProgressiveTextProps) {
   const [isForward, setIsForward] = useState<boolean>(true);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     setIsForward(Math.random() > 0.5);
   }, []);
 
-  const maxSize = 12;
-  const minSize = 3;
-  const increment = 0.4;
+  useEffect(() => {
+    const updateIsMobile = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth < 640);
+      }
+    };
+
+    updateIsMobile();
+    window.addEventListener('resize', updateIsMobile);
+    return () => window.removeEventListener('resize', updateIsMobile);
+  }, []);
+
+  const maxSize = isMobile ? 2.5 : 12;
+  const minSize = isMobile ? 1.3 : 3;
+  const increment = isMobile ? 0.06 : 0.4;
 
   return (
     <div className="flex flex-col">
-      <h1 className="font-bold whitespace-nowrap flex items-start overflow-hidden scrollbar-hide">
+      <h1 className="font-bold whitespace-normal sm:whitespace-nowrap flex items-start justify-center text-center overflow-hidden scrollbar-hide leading-tight">
         {text.split("").map((char, index) => {
           const fontSize = isForward
             ? minSize + index * increment
@@ -31,7 +44,9 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
               key={index}
               className="progressive-text inline-flex items-start hover:text-yellow-100 hover:cursor-pointer hover:text-4xl"
               style={{
-                fontSize: `min(${fontSize}rem, ${fontSize * 0.6}vw)`,
+                fontSize: isMobile
+                  ? `${fontSize * 0.9}rem`
+                  : `min(${fontSize}rem, ${fontSize * 0.6}vw)`,
                 animationDelay: `${index * 80}ms`,
                 lineHeight: 0.8,
                 opacity: 0,
