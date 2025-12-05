@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ListsImpl from "../algs/lists/listsImpl";
+import Graphs from "../algs/graphs";
 
 type AlgSelectorProps = {
   files: string[];
@@ -44,6 +45,14 @@ export default function AlgSelector({ files }: AlgSelectorProps) {
           <ListsImpl />
         </div>
       )}
+
+
+      {alg === "graphs" && (
+        <div className="w-full mt-6">
+          <Graphs />
+        </div>
+      )}
+
     </div>
   );
 }

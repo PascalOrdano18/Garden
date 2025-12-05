@@ -6,11 +6,11 @@ export class Node{
     x: number;
     y: number;
 
-    constructor(id: number, value: number){
+    constructor(id: number, value: number, x: number, y: number){
         this.id = id;
         this.value = value;
-        this.x = 100;
-        this.y = 100;
+        this.x = x;
+        this.y = y;
     }
 
     draw(){

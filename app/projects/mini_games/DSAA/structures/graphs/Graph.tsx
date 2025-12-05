@@ -1,7 +1,7 @@
 
 import Node from "./Node";
 
-class Graph{
+export class Graph{
     nodesAmount: number;
     adjacency: Map<number, number[]>;
     nodes: Map<number, Node>;
@@ -27,8 +27,28 @@ class Graph{
         return (
             <svg width={600} height={600}>
                 {
-                    this.adjacency.
+                    [...this.adjacency.entries()].map(([fromId, neighbors]) => {
+                        const fromNode = this.nodes.get(fromId);
+                        if(!fromNode) return null;
+                        
+                        return neighbors.map((toId) => {
+                            const toNode = this.nodes.get(toId);
+                            if(!toId) return null;
+                            return(
+                                <line 
+                                    key={`${fromId} - ${toId}`}
+                                    x1={fromNode.x}
+                                    y1={fromNode.y}
+                                    x2={toNode.x}
+                                    y2={toNode.y}
+                                    stroke="black"
+                                /> 
+                            );
+                        })
+                        
+                    })
                 } 
+                {[...this.nodes.values()].map((node) => node.draw())}
             </svg>
         )
     }
