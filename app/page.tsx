@@ -9,21 +9,26 @@ export default function Home() {
     const [ethValue, setEthValue] = useState<string | null>(null);
 
     useEffect(() => {
-        getCryptoValues();
-    });
-    
+        let cancelled = false;
 
-    const getCryptoValues = async () => {
-        const resBtc = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'); 
-        if(!resBtc.ok) return ;
-        let data = await resBtc.json();
-        setBtcValue(data.bitcoin.usd);
+        (async () => {
+            const resBtc = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'); 
+            if(!resBtc.ok || cancelled) return;
+            let data = await resBtc.json();
+            if (cancelled) return;
+            setBtcValue(data.bitcoin.usd);
 
-        const resEth = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
-        if(!resEth.ok) return ;
-        data = await resEth.json();
-        setEthValue(data.ethereum.usd);
-    }
+            const resEth = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+            if(!resEth.ok || cancelled) return;
+            data = await resEth.json();
+            if (cancelled) return;
+            setEthValue(data.ethereum.usd);
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
 
   return (

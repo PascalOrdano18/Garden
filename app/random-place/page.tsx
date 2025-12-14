@@ -1,21 +1,10 @@
 'use client';
 
-import {useEffect} from 'react';
-
-const NASA_API_URL = 'https://epic.gsfc.nasa.gov/api/';
-const now = new Date();
-now.setDate(now.getDate() - 1);
-const YYYY = now.getFullYear();
-const MM = String(now.getMonth() + 1).padStart(2, "0");
-const DD = String(now.getDate()).padStart(2, "0");
+import {useEffect, useCallback} from 'react';
 
 export default function RandomPlace(){
 
-    useEffect(() => {
-        fetchNasa();
-    });
-
-    const fetchNasa = async () => {
+    const fetchNasa = useCallback(async () => {
         const apiKey = process.env.NEXT_PUBLIC_NASA_API_KEY;
 
         const res = await fetch(`https://api.nasa.gov/EPIC/api/natural?api_key=${apiKey}`);
@@ -34,7 +23,11 @@ export default function RandomPlace(){
         const imageUrl = `https://epic.gsfc.nasa.gov/archive/natural/${year}/${month}/${day}/png/${last.image}.png`;
 
         console.log("URL final:", imageUrl);
-    }
+    }, []);
+
+    useEffect(() => {
+        fetchNasa();
+    }, [fetchNasa]);
 
 
     return(

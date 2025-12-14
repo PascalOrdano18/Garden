@@ -87,7 +87,28 @@ export default function ListsImpl() {
       id: lastNode.id + 1,
     };
 
-    lastNode.next = node;
+    const updatedLastNode: NodeType = {
+      ...lastNode,
+      next: node,
+    };
+
+    setFirstNode((prev) => {
+      if (!prev) return prev;
+      // Update the chain by finding and updating the lastNode in the chain
+      const updateNode = (n: NodeType | null): NodeType | null => {
+        if (!n) return null;
+        if (n.id === lastNode.id) {
+          return updatedLastNode;
+        }
+        const updatedNext = updateNode(n.next ?? null);
+        return {
+          ...n,
+          next: updatedNext === null ? undefined : updatedNext,
+        };
+      };
+      const result = updateNode(prev);
+      return result;
+    });
 
     setLastNode(node);
     setPositions((prev) => ({

@@ -8,12 +8,8 @@ interface ProgressiveTextProps {
 }
 
 export default function ProgressiveText({ text }: ProgressiveTextProps) {
-  const [isForward, setIsForward] = useState<boolean>(true);
+  const [isForward] = useState<boolean>(() => Math.random() > 0.5);
   const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsForward(Math.random() > 0.5);
-  }, []);
 
   useEffect(() => {
     const updateIsMobile = () => {

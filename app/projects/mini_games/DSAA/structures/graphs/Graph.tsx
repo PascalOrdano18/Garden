@@ -1,5 +1,5 @@
 
-import Node from "./Node";
+import { Node } from "./Node";
 
 export class Graph{
     nodesAmount: number;
@@ -33,7 +33,7 @@ export class Graph{
                         
                         return neighbors.map((toId) => {
                             const toNode = this.nodes.get(toId);
-                            if(!toId) return null;
+                            if(!toNode) return null;
                             return(
                                 <line 
                                     key={`${fromId} - ${toId}`}

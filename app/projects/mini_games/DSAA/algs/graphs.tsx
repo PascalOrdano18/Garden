@@ -1,7 +1,7 @@
 
 
-import { Graph } from '../structures/graphs/Graph.tsx';
-import { Node } from '../structures/graphs/Node.tsx';
+import { Graph } from '../structures/graphs/Graph';
+import { Node } from '../structures/graphs/Node';
 export default function Graphs(){
     const g = new Graph();
 
