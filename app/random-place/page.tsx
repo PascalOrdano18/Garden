@@ -2,13 +2,6 @@
 
 import {useEffect} from 'react';
 
-const NASA_API_URL = 'https://epic.gsfc.nasa.gov/api/';
-const now = new Date();
-now.setDate(now.getDate() - 1);
-const YYYY = now.getFullYear();
-const MM = String(now.getMonth() + 1).padStart(2, "0");
-const DD = String(now.getDate()).padStart(2, "0");
-
 export default function RandomPlace(){
 
     useEffect(() => {
