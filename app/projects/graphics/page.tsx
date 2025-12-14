@@ -2,6 +2,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 interface Graphic {
@@ -55,7 +56,17 @@ export default function Graphics() {
                         C Graphics
                     </h1>
                     <p className="text-gray-400 text-base sm:text-lg md:text-xl">
-                        A collection of graphics created using C and SDL
+                        A collection of graphics created using C and SDL.
+                        <br />
+                        More at{' '}
+                        <Link 
+                            href="https://github.com/PascalOrdano18/C-Graphics"
+                            className="text-white hover:text-yellow-100 transition-all"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            GitHub
+                        </Link>
                     </p>
                 </div>
 
