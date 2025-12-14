@@ -19,11 +19,25 @@ const projects: Project[] = [
         description: "Digital Magazine web site"
     },
     {
+        title: "C Graphics",
+        image: "/graphics.png",
+        alt: "C graphics",
+        link: "/projects/graphics",
+        description: "C Graphics using SDL"
+    },
+    {
+        title: "Coding for fun",
+        image: "/MiniGames.jpeg",
+        alt: "Mini games",
+        link: "/projects/mini_games",
+        description: "A collection of fun mini-games and interactive experiences"
+    },
+    {
         title: "Chat With Your Journal",
-        image: "/ChatWithYourJournal.png",
+        image: "/journal.png",
         alt: "Chat With Your Journal application",
         link: "https://chat-with-your-journal.vercel.app/journal",
-        description: "AI-powered journaling companion for personal reflection and growth"
+        description: "AI-powered journaling companion. I should kill this project"
     },
     {
         title: "ITBA's ASME web site",
@@ -34,17 +48,10 @@ const projects: Project[] = [
     },
     {
         title: "SAT Vocabulary Tutor",
-        image: "/SAT1.png",
+        image: "/SAT.png",
         alt: "SAT vocabulary learning application",
         link: "https://sat-app.vercel.app/",
         description: "Interactive vocabulary learning platform"
-    },
-    {
-        title: "Coding for fun",
-        image: "/MiniGames.jpeg",
-        alt: "Mini games",
-        link: "/projects/mini_games",
-        description: "A collection of fun mini-games and interactive experiences"
     },
 ];
 

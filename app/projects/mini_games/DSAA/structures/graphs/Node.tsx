@@ -36,4 +36,10 @@ export class Node{
             </g>        
         )
     }
+
+
+
+    select(){
+        
+    }
 }
