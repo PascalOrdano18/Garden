@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 type LetterStatus = "correct" | "incorrect" | "current" | "pending";
 
@@ -22,6 +22,8 @@ export default function Type() {
   const [finish, setFinish] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [strokesAmount, setStrokesAmount] = useState<number>(0);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [endTime, setEndTime] = useState<number | null>(null);
 
   const startTimerRef = useRef<number | null>(null);
   const endTimerRef = useRef<number | null>(null);
@@ -31,13 +33,7 @@ export default function Type() {
   //   setText(texts[idx].text);
   // }, []);
 
-  useEffect(() => {
-    (async () => {
-      await getPoem();
-    })();
-  }, []);
-
-  const getPoem = async () => {
+  const getPoem = useCallback(async () => {
     try {
       const res = await fetch('/api/games/type', {
         cache: 'no-store'
@@ -59,10 +55,18 @@ export default function Type() {
     } catch(error){
       console.log(error);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      await getPoem();
+    })();
+  }, [getPoem]);
 
   const startTimer = () => {
-    startTimerRef.current = performance.now();
+    const now = performance.now();
+    startTimerRef.current = now;
+    setStartTime(now);
   }
 
   const handleChange = (value: string): void => {
@@ -73,7 +77,9 @@ export default function Type() {
     setInput(value);
     setStrokesAmount(prev => prev + 1);
     if (value.length === text.length && startTimerRef.current !== null) {
-      endTimerRef.current = performance.now(); 
+      const now = performance.now();
+      endTimerRef.current = now;
+      setEndTime(now);
       setFinish(true);
     }
   }
@@ -84,6 +90,8 @@ export default function Type() {
     setInput('');
     startTimerRef.current = null;
     endTimerRef.current = null;
+    setStartTime(null);
+    setEndTime(null);
     getPoem();
   }
 
@@ -128,11 +136,11 @@ export default function Type() {
         onChange={(e) => handleChange(e.target.value)}
       />
 
-      {finish && startTimerRef.current && endTimerRef.current &&
+      {finish && startTime !== null && endTime !== null &&
         <div>
           <h1 className="text-3xl font-extrabold text-blue-500">FINISHED!</h1>
           {(() => {
-            const elapsedMs = endTimerRef.current - startTimerRef.current;
+            const elapsedMs = endTime - startTime;
             const minutes = Math.max(elapsedMs / 60000, 1e-6);
             const wpm = Math.round((text.length / 5) / minutes);
             const accuracy = (text.length / strokesAmount) * 100;

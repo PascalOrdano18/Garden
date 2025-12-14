@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useMemo, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
 interface BackgroundContextType {
@@ -12,17 +12,24 @@ interface BackgroundContextType {
 const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
 
 export function BackgroundProvider({ children }: { children: ReactNode }) {
-  const [isFixed, setIsFixed] = useState(false);
   const pathname = usePathname();
   const isJournalPage = pathname?.startsWith('/blog') || false;
   const isWriteOrDiePage = pathname?.endsWith('/WriteOrDie') || false;
+  const shouldBeFixed = useMemo(() => isJournalPage || isWriteOrDiePage, [isJournalPage, isWriteOrDiePage]);
+  const [isFixed, setIsFixed] = useState(() => shouldBeFixed);
+  const prevShouldBeFixedRef = useRef(shouldBeFixed);
 
   useEffect(() => {
-    // Auto-fix background when on journal pages
-    if (isJournalPage || isWriteOrDiePage) {
-      setIsFixed(true);
+    // Only update if the value actually changed
+    if (prevShouldBeFixedRef.current !== shouldBeFixed) {
+      prevShouldBeFixedRef.current = shouldBeFixed;
+      // Use setTimeout to avoid synchronous setState in effect
+      const timeoutId = setTimeout(() => {
+        setIsFixed(shouldBeFixed);
+      }, 0);
+      return () => clearTimeout(timeoutId);
     }
-  }, [isJournalPage, isWriteOrDiePage]);
+  }, [shouldBeFixed]);
 
   const toggleFixed = () => {
     setIsFixed(!isFixed);

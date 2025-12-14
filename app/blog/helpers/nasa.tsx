@@ -6,21 +6,29 @@ import Image from 'next/image';
 export default function Nasa() {
   const [image, setImage] = useState<string>('');
 
-  const getNasaImage = async () => {
-    try {
-      const res = await fetch('/api/nasa');
-      if (!res.ok) return;
-
-      const data = await res.json();
-      console.log(data);
-      setImage(data.url);
-    } catch (error) {
-      console.error('Error fetching NASA image:', error);
-    }
-  };
-
   useEffect(() => {
-    void getNasaImage();
+    let cancelled = false;
+    
+    (async () => {
+      try {
+        const res = await fetch('/api/nasa');
+        if (!res.ok || cancelled) return;
+
+        const data = await res.json();
+        if (cancelled) return;
+        
+        console.log(data);
+        setImage(data.url);
+      } catch (error) {
+        if (!cancelled) {
+          console.error('Error fetching NASA image:', error);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
