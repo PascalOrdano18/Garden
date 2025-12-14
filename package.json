@@ -12,7 +12,7 @@
     "@paper-design/shaders-react": "^0.0.54",
     "@vercel/analytics": "^1.5.0",
     "gray-matter": "^4.0.3",
-    "next": "^15.5.3",
+    "next": "^15.5.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^9.0.1"
@@ -24,6 +24,7 @@
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.16",
     "eslint": "^9",
+    "eslint-config-next": "^15.5.7",
     "eslint-config-next": "^15.5.3",
     "eslint-plugin-react-hooks": "^7.0.1",
     "postcss": "^8.4.31",
