@@ -32,6 +32,12 @@ const graphics: Graphic[] = [
         alt: "Sand simulation using C",
         description: "Just some falling sand"
     },
+    {
+        title: "Fractal Trees",
+        image: "/trees.png",
+        alt: "Fractal Trees in C",
+        description: "Basic trees no description needed"
+    }
 ];
 
 export default function Graphics() {
