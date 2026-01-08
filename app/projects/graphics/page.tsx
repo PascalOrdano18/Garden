@@ -10,7 +10,13 @@ interface Graphic {
     image: string;
     alt: string;
     description?: string;
+    code?: string | null;
 }
+
+interface Repo {
+
+}
+
 
 // Add your graphics here - images should be in the /public folder
 const graphics: Graphic[] = [
@@ -40,9 +46,27 @@ const graphics: Graphic[] = [
     }
 ];
 
+
+const getRepos = () => {
+    
+    try{
+        const res = fetch(`/api/github-activity/repo/`);
+
+        if(!res.ok) throw new Error("Api error");
+        const data = await res.json();
+        setRepos(data);
+    } catch {
+        setLoadingRepos(false);
+    }
+}
+
 export default function Graphics() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedTitle, setSelectedTitle] = useState<string | null>(null);
+
+
+    const [repos, setRepos] = useState<Repo[] | null>(null);
+    const [loadingRepos, setLoadingRepos] = useState<boolean>(false);
 
     const handleImageClick = (image: string, title: string) => {
         setSelectedImage(image);
@@ -53,6 +77,12 @@ export default function Graphics() {
         setSelectedImage(null);
         setSelectedTitle(null);
     };
+
+
+
+    const handleCodeClick = (e: string) => {
+        console.log("code bro");
+    }
 
     return (
         <div className="min-h-screen w-full">
@@ -79,20 +109,27 @@ export default function Graphics() {
                 {graphics.length === 0 ? (
                     <div className="text-center py-12">
                         <p className="text-gray-500 text-lg">
-                            No graphics added yet. Add them to the graphics array in the page component.
+                            No graphics, weird. Revisa todo.
                         </p>
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-8 sm:gap-12">
+                    <div className="space-y-12 sm:space-y-16 lg:space-y-20">
                         {graphics.map((graphic, index) => (
                             <div
                                 key={index}
                                 className="group w-full transition-all duration-300"
                             >
                                 <div className="mb-4 sm:mb-6">
-                                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium tracking-tight mb-2 leading-tight text-white transition-colors">
-                                        {graphic.title}
-                                    </h2>
+                                    <div className='flex flex-row'>
+                                        <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium tracking-tight mb-2 leading-tight text-white transition-colors">
+                                            {graphic.title}
+                                        </h2>
+                                        <button 
+                                            onClick={() => handleCodeClick()}   
+                                            className='bg-transparent border border-white mx-4 px-2 rounded hover:cursor-pointer hover:bg-yellow-100 hover:text-black hover:border-white transition-all'>
+                                            Code
+                                        </button>
+                                    </div>
                                     {graphic.description && (
                                         <p className="text-gray-500 text-sm sm:text-base leading-relaxed">
                                             {graphic.description}
