@@ -13,11 +13,6 @@ interface Graphic {
     code?: string | null;
 }
 
-interface Repo {
-
-}
-
-
 // Add your graphics here - images should be in the /public folder
 const graphics: Graphic[] = [
     {
