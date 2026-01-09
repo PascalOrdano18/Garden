@@ -39,6 +39,12 @@ const graphics: Graphic[] = [
         description: "Just some falling sand"
     },
     {
+        title: "Game of Life",
+        image: "/game_of_life.jpeg",
+        alt: "Conways Game of Life",
+        description: "Conways Game Of Life"
+    },
+    {
         title: "Fractal Trees",
         image: "/trees.png",
         alt: "Fractal Trees in C",
@@ -47,18 +53,18 @@ const graphics: Graphic[] = [
 ];
 
 
-const getRepos = () => {
-    
-    try{
-        const res = fetch(`/api/github-activity/repo/`);
-
-        if(!res.ok) throw new Error("Api error");
-        const data = await res.json();
-        setRepos(data);
-    } catch {
-        setLoadingRepos(false);
-    }
-}
+// const getRepos = () => {
+//
+//     try{
+//         const res = fetch(`/api/github-activity/repo/`);
+//
+//         if(!res.ok) throw new Error("Api error");
+//         const data = await res.json();
+//         setRepos(data);
+//     } catch {
+//         setLoadingRepos(false);
+//     }
+// }
 
 export default function Graphics() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
