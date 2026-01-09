@@ -66,8 +66,6 @@ export default function Graphics() {
     const [selectedTitle, setSelectedTitle] = useState<string | null>(null);
 
 
-    const [repos, setRepos] = useState<Repo[] | null>(null);
-    const [loadingRepos, setLoadingRepos] = useState<boolean>(false);
 
     const handleImageClick = (image: string, title: string) => {
         setSelectedImage(image);
