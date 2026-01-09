@@ -65,8 +65,6 @@ export default function Graphics() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedTitle, setSelectedTitle] = useState<string | null>(null);
 
-
-
     const handleImageClick = (image: string, title: string) => {
         setSelectedImage(image);
         setSelectedTitle(title);
@@ -79,7 +77,7 @@ export default function Graphics() {
 
 
 
-    const handleCodeClick = (e: string) => {
+    const handleCodeClick = () => {
         console.log("code bro");
     }
 
