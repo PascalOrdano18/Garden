@@ -15,7 +15,7 @@ export default async function BlogPage(){
     const fileNames = fs.readdirSync(postsDirectory);  // Lee los nombres de los archivos de la carpeta
 
     const posts: BlogPost[] = fileNames.map((fileName) => {
-        const filePath = path.join(postsDirectory, fileName);  
+        const filePath = path.join(postsDirectory, fileName);
         const fileContent = fs.readFileSync(filePath, "utf-8");  // lee el contenido del archivo de markdown
         const { data } = matter(fileContent);
 
@@ -30,7 +30,7 @@ export default async function BlogPage(){
             date: data.date,
             ...data,  // el operador ... devuelve todos los elementos del objeto
         }
-    })
+    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
 
     return (

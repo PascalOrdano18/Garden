@@ -7,8 +7,21 @@ import './globals.css';
 import { Analytics } from "@vercel/analytics/next"
 
 export const metadata = {
-  title: 'Pascals Garden',
-  description: 'personal site',
+  title: "Pascal's Garden",
+  description: 'A place where Pascal Ordano shares creations, projects, and things that interest him. Software engineering student at ITBA.',
+  keywords: ['Pascal Ordano', 'portfolio', 'software engineering', 'ITBA', 'projects', 'blog'],
+  authors: [{ name: 'Pascal Ordano' }],
+  openGraph: {
+    title: "Pascal's Garden",
+    description: 'A place where Pascal Ordano shares creations, projects, and things that interest him.',
+    type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary',
+    title: "Pascal's Garden",
+    description: 'A place where Pascal Ordano shares creations, projects, and things that interest him.',
+  },
 };
 
 interface RootLayoutProps {

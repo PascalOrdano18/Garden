@@ -3,26 +3,40 @@
 import ProgressiveText from '@/app/components/ProgressiveText';
 import { useState, useEffect } from 'react';
 
+type LoadingState = 'loading' | 'success' | 'error';
+
 export default function Home() {
-    
+
     const [btcValue, setBtcValue] = useState<string | null>(null);
     const [ethValue, setEthValue] = useState<string | null>(null);
+    const [priceState, setPriceState] = useState<LoadingState>('loading');
 
     useEffect(() => {
         let cancelled = false;
 
         (async () => {
-            const resBtc = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'); 
-            if(!resBtc.ok || cancelled) return;
-            let data = await resBtc.json();
-            if (cancelled) return;
-            setBtcValue(data.bitcoin.usd);
+            try {
+                const resBtc = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+                if(!resBtc.ok || cancelled) {
+                    if (!cancelled) setPriceState('error');
+                    return;
+                }
+                let data = await resBtc.json();
+                if (cancelled) return;
+                setBtcValue(data.bitcoin.usd);
 
-            const resEth = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
-            if(!resEth.ok || cancelled) return;
-            data = await resEth.json();
-            if (cancelled) return;
-            setEthValue(data.ethereum.usd);
+                const resEth = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+                if(!resEth.ok || cancelled) {
+                    if (!cancelled) setPriceState('error');
+                    return;
+                }
+                data = await resEth.json();
+                if (cancelled) return;
+                setEthValue(data.ethereum.usd);
+                setPriceState('success');
+            } catch {
+                if (!cancelled) setPriceState('error');
+            }
         })();
 
         return () => {
@@ -43,7 +57,12 @@ export default function Home() {
           Aires (ITBA)
         </p>
 
-        {btcValue && ethValue && (
+        {priceState === 'loading' && (
+          <p className="mt-1 text-xs sm:text-base text-center text-gray-500">
+            Loading prices...
+          </p>
+        )}
+        {priceState === 'success' && btcValue && ethValue && (
           <ul className="mt-1 text-xs sm:text-base text-center space-y-1">
             <li>
               BTC at <span className="text-yellow-100">${btcValue}</span>
@@ -52,6 +71,11 @@ export default function Home() {
               ETH at <span className="text-yellow-100">${ethValue}</span>
             </li>
           </ul>
+        )}
+        {priceState === 'error' && (
+          <p className="mt-1 text-xs sm:text-base text-center text-gray-500">
+            Unable to load prices
+          </p>
         )}
       </div>
     </div>

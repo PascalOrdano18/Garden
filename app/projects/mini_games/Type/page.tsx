@@ -22,8 +22,10 @@ export default function Type() {
   const [finish, setFinish] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [strokesAmount, setStrokesAmount] = useState<number>(0);
+  const [correctStrokes, setCorrectStrokes] = useState<number>(0);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const startTimerRef = useRef<number | null>(null);
   const endTimerRef = useRef<number | null>(null);
@@ -34,15 +36,17 @@ export default function Type() {
   // }, []);
 
   const getPoem = useCallback(async () => {
+    setIsLoading(true);
     try {
       const res = await fetch('/api/games/type', {
         cache: 'no-store'
       });
       if(!res.ok){
         console.log(res.status);
+        setText('The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.');
         return;
       }
-      
+
       const data = await res.json();
       const lines = Array.isArray(data) && data[0]?.lines ? data[0].lines : [];
       const joined = Array.isArray(lines) ? lines.join(' ') : '';
@@ -50,10 +54,15 @@ export default function Type() {
       if (joined) {
         const value = joined.slice(0, 200);
         setText(value);
+      } else {
+        setText('The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.');
       }
-    
+
     } catch(error){
       console.log(error);
+      setText('The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.');
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -74,6 +83,13 @@ export default function Type() {
     if(startTimerRef.current == null && value.length > 0){
       startTimer();
     }
+    // Track if the new character is correct
+    if (value.length > input.length) {
+      const newCharIndex = value.length - 1;
+      if (value[newCharIndex] === text[newCharIndex]) {
+        setCorrectStrokes(prev => prev + 1);
+      }
+    }
     setInput(value);
     setStrokesAmount(prev => prev + 1);
     if (value.length === text.length && startTimerRef.current !== null) {
@@ -87,6 +103,7 @@ export default function Type() {
   const reset = () => {
     setFinish(false);
     setStrokesAmount(0);
+    setCorrectStrokes(0);
     setInput('');
     startTimerRef.current = null;
     endTimerRef.current = null;
@@ -122,12 +139,16 @@ export default function Type() {
   return (
     <div className="flex flex-col items-center w-full">
       <h1 className="text-3xl">TYPING TEST</h1>
-      <div className="w-full my-10">
-        {Array.from(text).map((char, i) => (
-          <span key={i} className={`text-2xl ${classFor(statuses[i])}`}>
-            {char}
-          </span>
-        ))}
+      <div className="w-full my-10 min-h-[100px]">
+        {isLoading ? (
+          <p className="text-gray-500 text-2xl">Loading text...</p>
+        ) : (
+          Array.from(text).map((char, i) => (
+            <span key={i} className={`text-2xl ${classFor(statuses[i])}`}>
+              {char}
+            </span>
+          ))
+        )}
       </div>
       <textarea
         className="text-white overflow-hidden w-full my-10 bg-transparent border-white p-2"
@@ -143,7 +164,7 @@ export default function Type() {
             const elapsedMs = endTime - startTime;
             const minutes = Math.max(elapsedMs / 60000, 1e-6);
             const wpm = Math.round((text.length / 5) / minutes);
-            const accuracy = (text.length / strokesAmount) * 100;
+            const accuracy = strokesAmount > 0 ? (correctStrokes / strokesAmount) * 100 : 0;
             return (
               <div>
                 <h3>WPM: {wpm}</h3>

@@ -37,7 +37,7 @@ const projects: Project[] = [
         image: "/journal.png",
         alt: "Chat With Your Journal application",
         link: "https://chat-with-your-journal.vercel.app/journal",
-        description: "AI-powered journaling companion. I should kill this project"
+        description: "AI-powered journaling companion"
     },
     {
         title: "ITBA's ASME web site",
@@ -79,7 +79,7 @@ export default function Projects() {
                         <div key={index} className="w-full">
                             <Link 
                                 href={project.link} 
-                                target={project.title === 'Mini Games' ? undefined : "_blank"}
+                                target={project.link.startsWith('/') ? undefined : "_blank"}
                             >
                                 <PCard 
                                     projectTitle={project.title}
