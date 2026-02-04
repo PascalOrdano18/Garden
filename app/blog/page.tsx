@@ -34,14 +34,21 @@ export default async function BlogPage(){
 
 
     return (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8">Journal</h1>
-          <ul className="space-y-6 sm:space-y-8">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-yellow-100">Journal</h1>
+          <ul className="space-y-1 sm:space-y-2">
             {posts.map(({ slug, title, date }) => (
               <li key={slug}>
-                <Link href={`/blog/${slug}`} className='hover:text-yellow-100 transition-all block'>
-                  <h2 className='text-lg sm:text-xl font-medium mb-2 transition-all'>{title}</h2>
-                  <p className="text-sm sm:text-base text-gray-400">{date}</p>
+                <Link
+                  href={`/blog/${slug}`}
+                  className="group block py-4 sm:py-5 px-4 sm:px-5 -mx-4 sm:-mx-5 rounded-xl
+                    hover:bg-white/5 active:bg-white/10
+                    transition-colors touch-manipulation"
+                >
+                  <h2 className="text-base sm:text-lg font-medium mb-1.5 group-hover:text-yellow-100 group-active:text-yellow-100 transition-colors">
+                    {title}
+                  </h2>
+                  <p className="text-sm text-gray-500">{date}</p>
                 </Link>
               </li>
             ))}

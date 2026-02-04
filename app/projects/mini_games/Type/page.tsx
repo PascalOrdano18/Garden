@@ -4,19 +4,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 type LetterStatus = "correct" | "incorrect" | "current" | "pending";
 
-// const texts = [
-//   {
-//     text: "Aprender a tipear rapido es clave para codear"
-//   },
-//   {
-//     text: "Cuando cuentes cuentos cuenta cuantos cuentos cuentas porque sino nunca sabras cuantos cuantos sabes contar"
-//   },
-//   {
-//     text: "Que linda mirada y que linda boca, te lo tenia que decir. Gracias, ojala igual. Dale, dale dale"
-//   },
-
-// ]
-
 export default function Type() {
   const [input, setInput] = useState<string>('');
   const [finish, setFinish] = useState<boolean>(false);
@@ -29,11 +16,7 @@ export default function Type() {
 
   const startTimerRef = useRef<number | null>(null);
   const endTimerRef = useRef<number | null>(null);
-
-  // useEffect(() => {
-  //   const idx: number = Math.floor(Math.random() * (texts.length));
-  //   setText(texts[idx].text);
-  // }, []);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const getPoem = useCallback(async () => {
     setIsLoading(true);
@@ -42,7 +25,6 @@ export default function Type() {
         cache: 'no-store'
       });
       if(!res.ok){
-        console.log(res.status);
         setText('The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.');
         return;
       }
@@ -58,8 +40,7 @@ export default function Type() {
         setText('The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.');
       }
 
-    } catch(error){
-      console.log(error);
+    } catch {
       setText('The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.');
     } finally {
       setIsLoading(false);
@@ -67,9 +48,7 @@ export default function Type() {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      await getPoem();
-    })();
+    getPoem();
   }, [getPoem]);
 
   const startTimer = () => {
@@ -110,6 +89,8 @@ export default function Type() {
     setStartTime(null);
     setEndTime(null);
     getPoem();
+    // Focus textarea after reset
+    setTimeout(() => textareaRef.current?.focus(), 100);
   }
 
   const getStatuses = (text: string, input: string): LetterStatus[] => {
@@ -129,58 +110,112 @@ export default function Type() {
 
   function classFor(status: LetterStatus): string {
     switch (status) {
-      case 'correct': return 'text-green-500';
-      case 'incorrect': return 'text-red-500 underline';
-      case 'current': return 'text-yellow-400 underline';
+      case 'correct': return 'text-green-400';
+      case 'incorrect': return 'text-red-400 bg-red-400/20 rounded';
+      case 'current': return 'text-yellow-300 border-b-2 border-yellow-300';
       case 'pending': return 'text-gray-500';
     }
   }
 
+  const progress = text.length > 0 ? (input.length / text.length) * 100 : 0;
+
   return (
-    <div className="flex flex-col items-center w-full">
-      <h1 className="text-3xl">TYPING TEST</h1>
-      <div className="w-full my-10 min-h-[100px]">
+    <div className="flex flex-col items-center w-full max-w-2xl mx-auto px-4 sm:px-6">
+      <h1 className="text-2xl sm:text-3xl font-bold text-yellow-100 mb-2">TYPING TEST</h1>
+
+      {/* Progress bar */}
+      {!finish && !isLoading && (
+        <div className="w-full h-1 bg-gray-800 rounded-full mb-4 sm:mb-6 overflow-hidden">
+          <div
+            className="h-full bg-yellow-100 transition-all duration-100 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+
+      {/* Text display */}
+      <div className="w-full p-4 sm:p-6 rounded-xl bg-black/30 backdrop-blur-sm border border-gray-800 mb-4 sm:mb-6 min-h-[120px] sm:min-h-[150px]">
         {isLoading ? (
-          <p className="text-gray-500 text-2xl">Loading text...</p>
+          <div className="flex items-center justify-center h-full">
+            <p className="text-gray-500 text-base sm:text-lg animate-pulse">Loading text...</p>
+          </div>
         ) : (
-          Array.from(text).map((char, i) => (
-            <span key={i} className={`text-2xl ${classFor(statuses[i])}`}>
-              {char}
-            </span>
-          ))
+          <p className="text-base sm:text-xl leading-relaxed sm:leading-loose font-mono">
+            {Array.from(text).map((char, i) => (
+              <span key={i} className={`${classFor(statuses[i])} transition-colors`}>
+                {char}
+              </span>
+            ))}
+          </p>
         )}
       </div>
-      <textarea
-        className="text-white overflow-hidden w-full my-10 bg-transparent border-white p-2"
-        value={input}
-        placeholder="Type Here..."
-        onChange={(e) => handleChange(e.target.value)}
-      />
 
-      {finish && startTime !== null && endTime !== null &&
-        <div>
-          <h1 className="text-3xl font-extrabold text-blue-500">FINISHED!</h1>
+      {/* Input area */}
+      {!finish && (
+        <textarea
+          ref={textareaRef}
+          className="w-full p-4 sm:p-5 rounded-xl bg-black/50 border border-gray-700
+            text-white text-base sm:text-lg font-mono
+            focus:border-yellow-100/50 focus:outline-none focus:ring-2 focus:ring-yellow-100/20
+            placeholder:text-gray-600 resize-none
+            transition-all touch-manipulation"
+          rows={3}
+          value={input}
+          placeholder="Start typing here..."
+          onChange={(e) => handleChange(e.target.value)}
+          disabled={isLoading}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+        />
+      )}
+
+      {/* Results */}
+      {finish && startTime !== null && endTime !== null && (
+        <div className="w-full p-4 sm:p-6 rounded-xl bg-green-500/10 border border-green-500/30 mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-green-400 mb-4 text-center">Complete!</h2>
           {(() => {
             const elapsedMs = endTime - startTime;
             const minutes = Math.max(elapsedMs / 60000, 1e-6);
             const wpm = Math.round((text.length / 5) / minutes);
             const accuracy = strokesAmount > 0 ? (correctStrokes / strokesAmount) * 100 : 0;
+            const seconds = (minutes * 60).toFixed(1);
             return (
-              <div>
-                <h3>WPM: {wpm}</h3>
-                <h3>Time: {(minutes * 60).toFixed(2)}</h3>
-                <h3>Strokes: {strokesAmount}</h3>
-                <h3>Accuracy: {accuracy.toFixed(2)} %</h3>  
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                  <p className="text-2xl sm:text-3xl font-bold text-yellow-100">{wpm}</p>
+                  <p className="text-xs sm:text-sm text-gray-400 mt-1">WPM</p>
+                </div>
+                <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                  <p className="text-2xl sm:text-3xl font-bold text-yellow-100">{accuracy.toFixed(0)}%</p>
+                  <p className="text-xs sm:text-sm text-gray-400 mt-1">Accuracy</p>
+                </div>
+                <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                  <p className="text-2xl sm:text-3xl font-bold text-white">{seconds}s</p>
+                  <p className="text-xs sm:text-sm text-gray-400 mt-1">Time</p>
+                </div>
+                <div className="text-center p-3 sm:p-4 rounded-lg bg-black/30">
+                  <p className="text-2xl sm:text-3xl font-bold text-white">{strokesAmount}</p>
+                  <p className="text-xs sm:text-sm text-gray-400 mt-1">Keystrokes</p>
+                </div>
               </div>
-              )
+            )
           })()}
         </div>
-      }
+      )}
 
+      {/* Reset button */}
       <button
         onClick={reset}
-        className="text-yellow-100 border border-yellow-100 px-4 py-2 sm:px-6 sm:py-3 rounded-md mt-4 sm:mt-6 hover:bg-yellow-100 hover:text-black transition-all text-sm sm:text-base touch-manipulation">
-        RESET
+        className="w-full sm:w-auto px-6 py-3 sm:py-4 rounded-xl
+          bg-yellow-100/10 border border-yellow-100/50 text-yellow-100 font-bold
+          hover:bg-yellow-100 hover:text-black
+          active:scale-[0.98]
+          transition-all duration-200 touch-manipulation
+          text-sm sm:text-base"
+      >
+        {finish ? 'TRY AGAIN' : 'NEW TEXT'}
       </button>
     </div>
   );
