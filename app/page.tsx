@@ -53,8 +53,8 @@ export default function Home() {
           A place where I share what I create and things that interest me.
         </p>
         <p className="slide-up text-center text-sm sm:text-base" style={{ animationDelay: '200ms' }}>
-          I&apos;m a software engineering student at Instituto Tecnologico de Buenos
-          Aires (ITBA)
+          Currently at <a href="https://roomix.ai" target="_blank" rel="noopener noreferrer" className="text-yellow-100 hover:underline">Roomix.ai</a> and
+          studying software engineering at Instituto Tecnologico de Buenos Aires (ITBA)
         </p>
 
         <div className="w-32 mx-auto border-t border-gray-700/50 slide-up" style={{ animationDelay: '400ms' }} />

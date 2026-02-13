@@ -12,6 +12,13 @@ interface Project {
 
 const projects: Project[] = [
     {
+        title: "Roomix.ai",
+        image: "/roomix.png",
+        alt: "Roomix.ai",
+        link: "https://roomix.ai",
+        description: "AI-powered real estate search engine"
+    },
+    {
         title: "Archivo 909",
         image: "/Archivo909.jpeg",
         alt: "Archivo 909",
