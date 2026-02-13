@@ -14,7 +14,7 @@
   }
 
   .slide-up {
-    animation: slideUp 0.5s ease-out;
+    animation: slideUp 0.5s ease-out both;
   }
 
   .progressive-text {
