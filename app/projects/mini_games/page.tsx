@@ -6,27 +6,22 @@ const games = [
     {
         name: "TicTacToe",
         description: "Classic game with win detection",
-        icon: "⭕"
     },
     {
         name: "Ultimate",
         description: "Tic Tac Toe with a twist",
-        icon: "🎯"
     },
     {
         name: "Type",
         description: "Test your typing speed",
-        icon: "⌨️"
     },
     {
         name: "DSAA",
         description: "Data structures visualized",
-        icon: "🔄"
     },
     {
         name: "WriteOrDie",
         description: "Keep writing or lose it all",
-        icon: "✍️"
     },
 ];
 
@@ -51,20 +46,17 @@ export default function MiniGames() {
                             hover:border-yellow-100/50 hover:bg-black/50
                             active:scale-[0.98] active:bg-yellow-100/5
                             transition-all duration-200 touch-manipulation">
-                            <div className="flex items-start gap-3 sm:gap-4">
-                                <span className="text-2xl sm:text-3xl" role="img" aria-hidden="true">
-                                    {game.icon}
-                                </span>
-                                <div className="flex-1 min-w-0">
-                                    <h2 className="text-lg sm:text-xl font-bold text-white group-hover:text-yellow-100 transition-colors truncate">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h2 className="text-lg sm:text-xl font-bold text-white group-hover:text-yellow-100 transition-colors">
                                         {game.name}
                                     </h2>
-                                    <p className="text-gray-500 text-xs sm:text-sm mt-1 line-clamp-2">
+                                    <p className="text-gray-500 text-xs sm:text-sm mt-1">
                                         {game.description}
                                     </p>
                                 </div>
                                 <svg
-                                    className="w-5 h-5 text-gray-600 group-hover:text-yellow-100 group-hover:translate-x-1 transition-all flex-shrink-0 mt-1"
+                                    className="w-5 h-5 text-gray-600 group-hover:text-yellow-100 group-hover:translate-x-1 transition-all flex-shrink-0"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
