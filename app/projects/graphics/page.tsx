@@ -10,60 +10,53 @@ interface Graphic {
     image: string;
     alt: string;
     description?: string;
-    code?: string | null;
+    codePath: string;
 }
 
-// Add your graphics here - images should be in the /public folder
 const graphics: Graphic[] = [
     {
         title: "Ray Tracer",
         image: "/rays.png",
         alt: "Ray Tracer using C",
-        description: "A very simple ray tracer using SDL. My very first SDL project"
+        description: "A very simple ray tracer using SDL. My very first SDL project",
+        codePath: "raytracer/raytracing.c"
     },
     {
         title: "Mandelbrot Set Plot",
         image: "/graphics.png",
         alt: "Mandelbrot set plot using C",
-        description: "The mandelbrot set is a fractal plotted into the X (real) and Y (complex) axis."
+        description: "The mandelbrot set is a fractal plotted into the X (real) and Y (complex) axis.",
+        codePath: "mandelbrotSet/mandelbrotPlot.c"
     },
     {
         title: "Sand Simulation",
         image: "/sand.jpeg",
         alt: "Sand simulation using C",
-        description: "Just some falling sand"
+        description: "Just some falling sand",
+        codePath: "sand/sand_simulation.c"
     },
     {
         title: "Game of Life",
         image: "/game_of_life.jpeg",
         alt: "Conways Game of Life",
-        description: "Conways Game Of Life"
+        description: "Conways Game Of Life",
+        codePath: "game_of_life/main.c"
     },
     {
         title: "Fractal Trees",
         image: "/trees.png",
         alt: "Fractal Trees in C",
-        description: "Basic trees no description needed"
+        description: "Basic trees no description needed",
+        codePath: "fractal_tree/tree.c"
     }
 ];
-
-
-// const getRepos = () => {
-//
-//     try{
-//         const res = fetch(`/api/github-activity/repo/`);
-//
-//         if(!res.ok) throw new Error("Api error");
-//         const data = await res.json();
-//         setRepos(data);
-//     } catch {
-//         setLoadingRepos(false);
-//     }
-// }
 
 export default function Graphics() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedTitle, setSelectedTitle] = useState<string | null>(null);
+    const [openCode, setOpenCode] = useState<string | null>(null);
+    const [codeCache, setCodeCache] = useState<Record<string, string>>({});
+    const [loading, setLoading] = useState<string | null>(null);
 
     const handleImageClick = (image: string, title: string) => {
         setSelectedImage(image);
@@ -75,11 +68,32 @@ export default function Graphics() {
         setSelectedTitle(null);
     };
 
+    const handleCodeClick = async (codePath: string) => {
+        if (openCode === codePath) {
+            setOpenCode(null);
+            return;
+        }
 
+        if (codeCache[codePath]) {
+            setOpenCode(codePath);
+            return;
+        }
 
-    const handleCodeClick = () => {
-        window.location.href = "https://github.com/PascalOrdano18/C-Graphics";
-    }
+        setLoading(codePath);
+        try {
+            const res = await fetch(
+                `https://api.github.com/repos/PascalOrdano18/C-Graphics/contents/${codePath}`
+            );
+            const data = await res.json();
+            const decoded = atob(data.content);
+            setCodeCache(prev => ({ ...prev, [codePath]: decoded }));
+            setOpenCode(codePath);
+        } catch {
+            setOpenCode(null);
+        } finally {
+            setLoading(null);
+        }
+    };
 
     return (
         <div className="min-h-screen w-full">
@@ -92,7 +106,7 @@ export default function Graphics() {
                         A collection of graphics created using C and SDL.
                         <br />
                         More at{' '}
-                        <Link 
+                        <Link
                             href="https://github.com/PascalOrdano18/C-Graphics"
                             className="text-white hover:text-yellow-100 transition-all"
                             target="_blank"
@@ -117,14 +131,14 @@ export default function Graphics() {
                                 className="group w-full transition-all duration-300"
                             >
                                 <div className="mb-4 sm:mb-6">
-                                    <div className='flex flex-row'>
+                                    <div className='flex flex-row items-center'>
                                         <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium tracking-tight mb-2 leading-tight text-white transition-colors">
                                             {graphic.title}
                                         </h2>
-                                        <button 
-                                            onClick={() => handleCodeClick()}   
+                                        <button
+                                            onClick={() => handleCodeClick(graphic.codePath)}
                                             className='bg-transparent border border-white mx-4 px-2 rounded hover:cursor-pointer hover:bg-yellow-100 hover:text-black hover:border-white transition-all'>
-                                            Code
+                                            {loading === graphic.codePath ? '...' : openCode === graphic.codePath ? 'Hide' : 'Code'}
                                         </button>
                                     </div>
                                     {graphic.description && (
@@ -133,6 +147,14 @@ export default function Graphics() {
                                         </p>
                                     )}
                                 </div>
+
+                                {openCode === graphic.codePath && codeCache[graphic.codePath] && (
+                                    <div className="mb-4 sm:mb-6 overflow-x-auto rounded-lg border border-gray-800 bg-black/60">
+                                        <pre className="p-4 text-sm text-gray-300 font-mono leading-relaxed">
+                                            <code>{codeCache[graphic.codePath]}</code>
+                                        </pre>
+                                    </div>
+                                )}
 
                                 <div className="overflow-hidden rounded-lg border border-gray-800 bg-black/20 w-full">
                                     <div className="relative aspect-[16/9] w-full cursor-pointer" onClick={() => handleImageClick(graphic.image, graphic.title)}>
