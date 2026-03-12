@@ -84,9 +84,8 @@ export default function Projects() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                     {projects.map((project, index) => (
                         <div key={index} className="w-full">
-                            <Link 
-                                href={project.link} 
-                                target={project.link.startsWith('/') ? undefined : "_blank"}
+                            <Link
+                                href={project.link}
                             >
                                 <PCard 
                                     projectTitle={project.title}

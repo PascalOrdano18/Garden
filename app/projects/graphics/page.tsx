@@ -78,7 +78,7 @@ export default function Graphics() {
 
 
     const handleCodeClick = () => {
-        console.log("code bro");
+        window.location.href = "https://github.com/PascalOrdano18/C-Graphics";
     }
 
     return (
