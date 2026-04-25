@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 
 const GITHUB_COLORS = [
-    '#161b22', // 0 contributions
-    '#0e4429', // 1-3 contributions
-    '#006d32', // 4-6 contributions
-    '#26a641', // 7-9 contributions
-    '#39d353', // 10+ contributions
+    '#161b22',
+    '#0e4429',
+    '#006d32',
+    '#26a641',
+    '#39d353',
 ];
 
 function getColor(count: number) {
@@ -39,10 +39,32 @@ interface GitHubResponse {
     };
 }
 
+function useVisibleWeeks(totalWeeks: number) {
+    const [count, setCount] = useState(totalWeeks);
+
+    useEffect(() => {
+        function update() {
+            if (window.innerWidth < 640) {
+                setCount(Math.min(totalWeeks, 20));
+            } else if (window.innerWidth < 1024) {
+                setCount(Math.min(totalWeeks, 36));
+            } else {
+                setCount(totalWeeks);
+            }
+        }
+        update();
+        window.addEventListener('resize', update);
+        return () => window.removeEventListener('resize', update);
+    }, [totalWeeks]);
+
+    return count;
+}
+
 export default function GitHubActivity() {
     const [weeks, setWeeks] = useState<Week[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const visibleWeeks = useVisibleWeeks(weeks.length);
 
     useEffect(() => {
         const fetchContributions = async () => {
@@ -81,45 +103,43 @@ export default function GitHubActivity() {
         );
     }
 
-    // GitHub calendar: columns = weeks, rows = days (Sun-Sat)
-    // Transpose weeks to get days as rows
-    const numRows = 7;
-    const numCols = weeks.length;
-    const grid = Array.from({ length: numRows }, (_, dayIdx) =>
-        weeks.map(week => week.contributionDays[dayIdx])
+    const displayedWeeks = weeks.slice(-visibleWeeks);
+    const numCols = displayedWeeks.length;
+    const grid = Array.from({ length: 7 }, (_, dayIdx) =>
+        displayedWeeks.map(week => week.contributionDays[dayIdx])
     );
 
     return (
-        <div className="w-full max-w-4xl mx-auto mt-4 sm:mt-8 p-4 sm:p-6 pt-8 sm:pt-12 lg:pt-20">
-            <div className="overflow-x-auto">
-                <div className="inline-block min-w-full">
-                    <div className="relative">
-                        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-lg"></div>
-                        <div className="relative grid gap-[1px] sm:gap-[2px] p-2" style={{ gridTemplateColumns: `repeat(${numCols}, minmax(0, 1fr))`, gridTemplateRows: `repeat(7, minmax(0, 1fr))` }}>
-                            {grid.map((row, rowIdx) =>
-                                row.map((day, colIdx) => (
-                                    <div
-                                        key={`${rowIdx}-${colIdx}`}
-                                        className="w-2 h-2 sm:w-3 sm:h-3 rounded-sm cursor-pointer hover:ring-1 hover:ring-gray-400 transition-all"
-                                        style={{
-                                            backgroundColor: getColor(day ? day.contributionCount : 0),
-                                        }}
-                                        title={day ? `${day.date}: ${day.contributionCount} contributions` : ''}
-                                    />
-                                ))
-                            )}
-                        </div>
-                    </div>
+        <div className="w-full max-w-4xl mx-auto mt-4 sm:mt-8 px-2 sm:px-6 pt-8 sm:pt-12 lg:pt-20">
+            <div className="relative rounded-lg overflow-hidden">
+                <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+                <div
+                    className="relative grid gap-[2px] sm:gap-[3px] p-3 sm:p-4"
+                    style={{
+                        gridTemplateColumns: `repeat(${numCols}, 1fr)`,
+                        gridTemplateRows: 'repeat(7, 1fr)',
+                    }}
+                >
+                    {grid.map((row, rowIdx) =>
+                        row.map((day, colIdx) => (
+                            <div
+                                key={`${rowIdx}-${colIdx}`}
+                                className="aspect-square rounded-sm cursor-pointer hover:ring-1 hover:ring-gray-400 transition-all"
+                                style={{
+                                    backgroundColor: getColor(day ? day.contributionCount : 0),
+                                }}
+                                title={day ? `${day.date}: ${day.contributionCount} contributions` : ''}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
             <div className="flex justify-end mt-2 text-xs sm:text-sm text-gray-400">
                 <span className="mr-2">Less</span>
                 <div className="flex gap-1">
-                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-sm bg-[#161b22]" />
-                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-sm bg-[#0e4429]" />
-                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-sm bg-[#006d32]" />
-                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-sm bg-[#26a641]" />
-                    <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-sm bg-[#39d353]" />
+                    {GITHUB_COLORS.map((color) => (
+                        <div key={color} className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm" style={{ backgroundColor: color }} />
+                    ))}
                 </div>
                 <span className="ml-2">More</span>
             </div>
