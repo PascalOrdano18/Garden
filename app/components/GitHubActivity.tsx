@@ -105,6 +105,7 @@ export default function GitHubActivity() {
 
     const displayedWeeks = weeks.slice(-visibleWeeks);
     const numCols = displayedWeeks.length;
+    const months = Math.round(visibleWeeks / 4.33);
     const grid = Array.from({ length: 7 }, (_, dayIdx) =>
         displayedWeeks.map(week => week.contributionDays[dayIdx])
     );
@@ -134,7 +135,13 @@ export default function GitHubActivity() {
                     )}
                 </div>
             </div>
-            <div className="flex justify-end mt-2 text-xs sm:text-sm text-gray-400">
+            <div className="flex justify-between items-center mt-2 text-xs sm:text-sm text-gray-400">
+                {visibleWeeks < weeks.length ? (
+                    <span>Last {months} months</span>
+                ) : (
+                    <span />
+                )}
+                <div className="flex items-center">
                 <span className="mr-2">Less</span>
                 <div className="flex gap-1">
                     {GITHUB_COLORS.map((color) => (
@@ -142,6 +149,7 @@ export default function GitHubActivity() {
                     ))}
                 </div>
                 <span className="ml-2">More</span>
+                </div>
             </div>
         </div>
     );
