@@ -50,12 +50,14 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
                 marginRight: `${fontSize * 0.05}rem`
               }}
             >
-              {char === 'G' ? 
+              {char === 'G' ?
                 <Link href={'/projects/mini_games/GenerativeArt'}>{char}</Link>
-              : char === 'P' ? 
+              : char === 'P' ?
                 <Link href={'/projects'}>{char}</Link>
               : char === "'" ?
                 <Link href={'/random-place'}>{char}</Link>
+              : char === 'r' && index === 8 ?
+                <Link href={'/links'}>{char}</Link>
               : char
               }
             </span>
