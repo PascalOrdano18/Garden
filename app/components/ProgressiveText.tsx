@@ -56,7 +56,7 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
                 <Link href={'/projects'}>{char}</Link>
               : char === "'" ?
                 <Link href={'/random-place'}>{char}</Link>
-              : char === 'r' && index === 8 ?
+              : char === 'l' ?
                 <Link href={'/links'}>{char}</Link>
               : char
               }
