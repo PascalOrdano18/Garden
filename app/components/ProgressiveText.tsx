@@ -8,8 +8,12 @@ interface ProgressiveTextProps {
 }
 
 export default function ProgressiveText({ text }: ProgressiveTextProps) {
-  const [isForward] = useState<boolean>(() => Math.random() > 0.5);
+  const [isForward, setIsForward] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsForward(Math.random() > 0.5);
+  }, []);
 
   useEffect(() => {
     const updateIsMobile = () => {
@@ -51,13 +55,13 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
               }}
             >
               {char === 'G' ?
-                <Link href={'/projects/mini_games/GenerativeArt'}>{char}</Link>
+                <Link href={'/projects/mini_games/GenerativeArt'} className="link-letter" style={{ animationDelay: '1.9s' }}>{char}</Link>
               : char === 'P' ?
-                <Link href={'/projects'}>{char}</Link>
+                <Link href={'/projects'} className="link-letter" style={{ animationDelay: '1s' }}>{char}</Link>
               : char === "'" ?
-                <Link href={'/random-place'}>{char}</Link>
+                <Link href={'/random-place'} className="link-letter" style={{ animationDelay: '1.6s' }}>{char}</Link>
               : char === 'l' ?
-                <Link href={'/links'}>{char}</Link>
+                <Link href={'/links'} className="link-letter" style={{ animationDelay: '1.3s' }}>{char}</Link>
               : char
               }
             </span>
