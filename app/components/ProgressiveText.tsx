@@ -12,6 +12,7 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only randomization to avoid SSR hydration mismatch
     setIsForward(Math.random() > 0.5);
   }, []);
 
