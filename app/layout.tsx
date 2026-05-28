@@ -2,25 +2,46 @@ import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
 import BackToTop from "@/app/components/BackToTop";
 import BackgroundShaders from "@/app/components/BackgroundShaders";
+import JsonLd from "@/app/components/JsonLd";
 import { BackgroundProvider } from "@/app/contexts/BackgroundContext";
 import './globals.css';
 import { Analytics } from "@vercel/analytics/next"
+import type { Metadata, Viewport } from "next";
 
-export const metadata = {
-  title: "Pascal's Garden",
-  description: 'A place where Pascal Ordano shares creations, projects, and things that interest him. Software engineering student at ITBA.',
-  keywords: ['Pascal Ordano', 'portfolio', 'software engineering', 'ITBA', 'projects', 'blog'],
-  authors: [{ name: 'Pascal Ordano' }],
+export const viewport: Viewport = {
+  themeColor: '#000000',
+  colorScheme: 'dark',
+};
+
+const description = 'A place where Pascal Ordano shares creations, projects, and things that interest him. Founding Engineer at Roomix.ai, studying software engineering at ITBA.';
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://pordano.com'),
+  title: {
+    default: "Pascal's Garden",
+    template: "%s · Pascal's Garden",
+  },
+  description,
+  keywords: ['Pascal Ordano', 'portfolio', 'software engineering', 'ITBA', 'Roomix', 'projects', 'blog'],
+  authors: [{ name: 'Pascal Ordano', url: 'https://pordano.com' }],
+  creator: 'Pascal Ordano',
+  alternates: {
+    canonical: '/',
+    types: { 'application/rss+xml': '/feed.xml' },
+  },
+  robots: { index: true, follow: true },
   openGraph: {
     title: "Pascal's Garden",
-    description: 'A place where Pascal Ordano shares creations, projects, and things that interest him.',
+    description,
+    url: 'https://pordano.com',
+    siteName: "Pascal's Garden",
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: "Pascal's Garden",
-    description: 'A place where Pascal Ordano shares creations, projects, and things that interest him.',
+    description,
   },
 };
 
@@ -41,8 +62,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <BackToTop />
           <Footer />
         </BackgroundProvider>
+        <JsonLd />
         <Analytics />
       </body>
     </html>
   );
-} 
+}

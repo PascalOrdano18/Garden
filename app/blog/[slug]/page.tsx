@@ -3,6 +3,7 @@ import fs from "fs";
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 function calculateReadingTime(content: string) {
   const wordsPerMinute = 200;
@@ -11,20 +12,55 @@ function calculateReadingTime(content: string) {
   return minutes;
 }
 
+function readPost(slug: string) {
+    const filePath = path.join(process.cwd(), "app", "content", "posts", `${slug}.md`);
+    const fileContents = fs.readFileSync(filePath, "utf8");
+    return matter(fileContents);
+}
+
 export async function generateStaticParams(){
     const postsDirectory = path.join(process.cwd(), "app", "content", "posts");
     const filenames = fs.readdirSync(postsDirectory);
-    
+
     return filenames.map((filename) => ({
         slug: filename.replace('.md', ''),
-      }));    
+      }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const { data, content } = readPost(slug);
+
+    const description = (data.description as string | undefined)
+        ?? content
+            .replace(/```[\s\S]*?```/g, '')
+            .replace(/[#*_`>[\]()]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .slice(0, 160);
+
+    return {
+        title: data.title,
+        description,
+        alternates: { canonical: `/blog/${slug}` },
+        openGraph: {
+            title: data.title,
+            description,
+            type: 'article',
+            publishedTime: data.date,
+            url: `/blog/${slug}`,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: data.title,
+            description,
+        },
+    };
 }
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }){
     const { slug } = await params;
-    const filePath = path.join(process.cwd(), "app", "content", "posts", `${slug}.md`);
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const { data, content } = matter(fileContents);
+    const { data, content } = readPost(slug);
     const readingTime = calculateReadingTime(content);
 
     return(

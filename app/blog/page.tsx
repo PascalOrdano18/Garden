@@ -2,6 +2,14 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Journal',
+  description: 'Writings and notes by Pascal Ordano.',
+  alternates: { canonical: '/blog' },
+  openGraph: { title: "Journal · Pascal's Garden", url: '/blog' },
+};
 
 interface BlogPost {
     slug: string;

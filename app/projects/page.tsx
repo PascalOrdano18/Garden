@@ -1,6 +1,14 @@
 import Link from "next/link"
 import PCard from "@/app/components/PCard";
 import GitHubActivity from "@/app/components/GitHubActivity";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Projects',
+  description: 'A selection of things Pascal Ordano has built — Roomix.ai, web sites, graphics, and side projects.',
+  alternates: { canonical: '/projects' },
+  openGraph: { title: "Projects · Pascal's Garden", url: '/projects' },
+};
 
 interface Project {
     title: string;
