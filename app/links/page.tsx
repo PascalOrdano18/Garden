@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import PinnedTweet from "@/app/components/PinnedTweet";
 
 export const metadata: Metadata = {
   title: 'Links',
   robots: { index: false, follow: false },
 };
+
+const PINNED_TWEET_ID = "2056462580462350666";
 
 interface LinkItem {
     title: string;
@@ -26,6 +29,14 @@ export default function Links() {
                 <h1 className="text-3xl sm:text-4xl font-bold mb-4 slide-up">Links</h1>
 
                 <div className="w-32 mx-auto border-t border-gray-700/50 my-8 slide-up" style={{ animationDelay: '150ms' }} />
+
+                <div
+                    data-theme="dark"
+                    className="flex justify-center mb-8 slide-up"
+                    style={{ animationDelay: '300ms' }}
+                >
+                    <PinnedTweet id={PINNED_TWEET_ID} />
+                </div>
 
                 <ul className="flex flex-col gap-3 sm:gap-4">
                     {links.map((link, index) => (
