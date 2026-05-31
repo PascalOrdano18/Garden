@@ -30,20 +30,12 @@ export default function Links() {
 
                 <div className="w-32 mx-auto border-t border-gray-700/50 my-8 slide-up" style={{ animationDelay: '150ms' }} />
 
-                <div
-                    data-theme="dark"
-                    className="flex justify-center mb-8 slide-up"
-                    style={{ animationDelay: '300ms' }}
-                >
-                    <PinnedTweet id={PINNED_TWEET_ID} />
-                </div>
-
                 <ul className="flex flex-col gap-3 sm:gap-4">
                     {links.map((link, index) => (
                         <li
                             key={link.url}
                             className="slide-up"
-                            style={{ animationDelay: `${450 + index * 80}ms` }}
+                            style={{ animationDelay: `${300 + index * 80}ms` }}
                         >
                             <a
                                 href={link.url}
@@ -61,6 +53,14 @@ export default function Links() {
                         </li>
                     ))}
                 </ul>
+
+                <div
+                    data-theme="dark"
+                    className="flex justify-center mt-10 slide-up"
+                    style={{ animationDelay: `${300 + links.length * 80}ms` }}
+                >
+                    <PinnedTweet id={PINNED_TWEET_ID} />
+                </div>
             </div>
         </div>
     );
