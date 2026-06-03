@@ -90,15 +90,22 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 <ReactMarkdown
                     className="prose prose-invert max-w-none prose-sm sm:prose-base"
                     components={{
-                        p: ({...props}) => <p className="mb-4 sm:mb-5 text-sm sm:text-base leading-relaxed text-gray-300" {...props} />,
+                        p: ({...props}) => <p className="mb-4 sm:mb-5 text-sm sm:text-base leading-relaxed text-gray-300 break-words" {...props} />,
                         h1: ({...props}) => <h1 className="text-xl sm:text-2xl font-bold mb-4 mt-8 text-white" {...props} />,
                         h2: ({...props}) => <h2 className="text-lg sm:text-xl font-bold mb-3 mt-6 text-white" {...props} />,
                         h3: ({...props}) => <h3 className="text-base sm:text-lg font-bold mb-2 mt-5 text-white" {...props} />,
-                        a: ({...props}) => <a className="text-yellow-100 hover:underline" {...props} />,
+                        a: ({...props}) => <a className="text-yellow-100 hover:underline break-words" {...props} />,
                         ul: ({...props}) => <ul className="list-disc list-inside mb-4 space-y-1 text-gray-300" {...props} />,
                         ol: ({...props}) => <ol className="list-decimal list-inside mb-4 space-y-1 text-gray-300" {...props} />,
                         blockquote: ({...props}) => <blockquote className="border-l-2 border-yellow-100/50 pl-4 italic text-gray-400 my-4" {...props} />,
                         code: ({...props}) => <code className="bg-gray-800 px-1.5 py-0.5 rounded text-sm text-yellow-100" {...props} />,
+                        pre: ({...props}) => (
+                            <pre
+                                className="mb-4 sm:mb-5 overflow-x-auto rounded-lg border border-gray-800 bg-gray-900/70 p-4 text-sm
+                                    [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-gray-200 [&_code]:whitespace-pre"
+                                {...props}
+                            />
+                        ),
                     }}
                 >
                     {content}

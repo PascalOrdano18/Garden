@@ -56,7 +56,7 @@ export default function Links() {
 
                 <div
                     data-theme="dark"
-                    className="flex justify-center mt-10 slide-up"
+                    className="flex justify-center mt-10 slide-up w-full overflow-hidden [&_*]:max-w-full"
                     style={{ animationDelay: `${300 + links.length * 80}ms` }}
                 >
                     <PinnedTweet id={PINNED_TWEET_ID} />

@@ -56,7 +56,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <BackgroundProvider>
           <BackgroundShaders />
           <Header />
-          <main className="mt-14 sm:mt-16 p-4 pb-16 sm:pb-20">
+          <main className="mt-14 sm:mt-16 p-4 pb-4 sm:pb-20">
             {children}
           </main>
           <BackToTop />

@@ -65,7 +65,7 @@ export default function Home() {
           </p>
         )}
         {priceState === 'success' && btcValue && ethValue && (
-          <div className="flex flex-row gap-3 justify-center slide-up" style={{ animationDelay: '600ms' }}>
+          <div className="flex flex-row flex-wrap gap-3 justify-center slide-up" style={{ animationDelay: '600ms' }}>
             <span className="border border-gray-700/50 rounded-full px-3 py-1 text-sm sm:text-base">
               BTC <span className="text-yellow-100">${btcValue}</span>
             </span>

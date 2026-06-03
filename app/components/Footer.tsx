@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
     return(
-        <footer className="fixed bottom-0 w-full py-3 sm:py-4 bg-gradient-to-t from-black via-black/80 to-transparent">
+        <footer className="relative sm:fixed bottom-0 w-full mt-8 sm:mt-0 py-3 sm:py-4 bg-gradient-to-t from-black via-black/80 to-transparent">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-row justify-between items-center">
                 <p className="text-gray-500 text-xs sm:text-sm">{new Date().getFullYear()} Pascal Ordano</p>
                 <div className="flex flex-row space-x-4 sm:space-x-6">

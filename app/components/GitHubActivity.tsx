@@ -60,10 +60,20 @@ function useVisibleWeeks(totalWeeks: number) {
     return count;
 }
 
+function formatDay(date: string) {
+    // Parse as local midnight to avoid timezone shifting the day.
+    return new Date(`${date}T00:00:00`).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    });
+}
+
 export default function GitHubActivity() {
     const [weeks, setWeeks] = useState<Week[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedDay, setSelectedDay] = useState<ContributionDay | null>(null);
     const visibleWeeks = useVisibleWeeks(weeks.length);
 
     useEffect(() => {
@@ -122,24 +132,37 @@ export default function GitHubActivity() {
                     }}
                 >
                     {grid.map((row, rowIdx) =>
-                        row.map((day, colIdx) => (
-                            <div
-                                key={`${rowIdx}-${colIdx}`}
-                                className="aspect-square rounded-sm cursor-pointer hover:ring-1 hover:ring-gray-400 transition-all"
-                                style={{
-                                    backgroundColor: getColor(day ? day.contributionCount : 0),
-                                }}
-                                title={day ? `${day.date}: ${day.contributionCount} contributions` : ''}
-                            />
-                        ))
+                        row.map((day, colIdx) => {
+                            const isSelected = !!day && selectedDay?.date === day.date;
+                            return (
+                                <button
+                                    type="button"
+                                    key={`${rowIdx}-${colIdx}`}
+                                    onClick={() => day && setSelectedDay(isSelected ? null : day)}
+                                    disabled={!day}
+                                    aria-label={day ? `${formatDay(day.date)}: ${day.contributionCount} contributions` : undefined}
+                                    className={`aspect-square rounded-sm transition-all touch-manipulation ${
+                                        day ? 'cursor-pointer hover:ring-1 hover:ring-gray-400' : 'cursor-default'
+                                    } ${isSelected ? 'ring-1 ring-yellow-100' : ''}`}
+                                    style={{
+                                        backgroundColor: getColor(day ? day.contributionCount : 0),
+                                    }}
+                                    title={day ? `${day.date}: ${day.contributionCount} contributions` : ''}
+                                />
+                            );
+                        })
                     )}
                 </div>
             </div>
             <div className="flex justify-between items-center mt-2 text-xs sm:text-sm text-gray-400">
-                {visibleWeeks < weeks.length ? (
-                    <span>Last {months} months</span>
+                {selectedDay ? (
+                    <span className="text-yellow-100">
+                        {formatDay(selectedDay.date)} · {selectedDay.contributionCount} contribution{selectedDay.contributionCount === 1 ? '' : 's'}
+                    </span>
+                ) : visibleWeeks < weeks.length ? (
+                    <span>Tap a day · last {months} months</span>
                 ) : (
-                    <span />
+                    <span>Tap a day</span>
                 )}
                 <div className="flex items-center">
                 <span className="mr-2">Less</span>
