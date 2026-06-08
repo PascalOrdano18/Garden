@@ -5,9 +5,10 @@ import Link from "next/link";
 
 interface ProgressiveTextProps {
   text: string;
+  fontVar?: string;
 }
 
-export default function ProgressiveText({ text }: ProgressiveTextProps) {
+export default function ProgressiveText({ text, fontVar = 'var(--font-geist-sans)' }: ProgressiveTextProps) {
   const [isForward, setIsForward] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -34,7 +35,7 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
 
   return (
     <div className="flex flex-col">
-      <h1 className="font-bold whitespace-normal sm:whitespace-nowrap flex items-start justify-center text-center overflow-hidden scrollbar-hide leading-tight">
+      <h1 style={{ fontFamily: fontVar, textTransform: 'uppercase' }} className="font-bold whitespace-normal sm:whitespace-nowrap flex items-start justify-center text-center overflow-hidden scrollbar-hide leading-tight">
         {text.split("").map((char, index) => {
           const fontSize = isForward
             ? minSize + index * increment
@@ -63,6 +64,8 @@ export default function ProgressiveText({ text }: ProgressiveTextProps) {
                 <Link href={'/random-place'} className="link-letter" style={{ animationDelay: '1.6s' }}>{char}</Link>
               : char === 'l' ?
                 <Link href={'/links'} className="link-letter" style={{ animationDelay: '1.3s' }}>{char}</Link>
+              : char === 'r' ?
+                <Link href={'https://roomix.ai'} target="_blank" rel="noopener noreferrer" className="link-letter" style={{ animationDelay: '1.3s' }}>{char}</Link>
               : char
               }
             </span>

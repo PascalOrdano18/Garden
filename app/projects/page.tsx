@@ -20,6 +20,13 @@ interface Project {
 
 const projects: Project[] = [
     {
+        title: "OLI",
+        image: "/oli.png",
+        alt: "OLI",
+        link: "https://oliagent.com/",
+        description: "HackITBA 2026"
+    },
+    {
         title: "Roomix.ai",
         image: "/roomix.png",
         alt: "Roomix.ai",
@@ -94,6 +101,8 @@ export default function Projects() {
                         <div key={index} className="w-full">
                             <Link
                                 href={project.link}
+                                target={project.link.startsWith("http") ? "_blank" : undefined}
+                                rel={project.link.startsWith("http") ? "noopener noreferrer" : undefined}
                             >
                                 <PCard 
                                     projectTitle={project.title}

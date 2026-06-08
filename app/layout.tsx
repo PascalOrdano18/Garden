@@ -5,6 +5,7 @@ import BackgroundShaders from "@/app/components/BackgroundShaders";
 import JsonLd from "@/app/components/JsonLd";
 import { BackgroundProvider } from "@/app/contexts/BackgroundContext";
 import './globals.css';
+import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata, Viewport } from "next";
 
@@ -51,7 +52,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="en" className={GeistSans.variable}>
       <body className="bg-black text-white min-h-screen flex flex-col items-center justify-start sm:justify-center">
         <BackgroundProvider>
           <BackgroundShaders />
