@@ -35,11 +35,19 @@ export default function ProgressiveText({ text, fontVar = 'var(--font-geist-sans
 
   return (
     <div className="flex flex-col">
-      <h1 style={{ fontFamily: fontVar, textTransform: 'uppercase' }} className="font-bold whitespace-normal sm:whitespace-nowrap flex items-start justify-center text-center overflow-hidden scrollbar-hide leading-tight">
+      <h1 style={{ fontFamily: fontVar, textTransform: 'uppercase' }} className="font-bold flex flex-wrap sm:flex-nowrap gap-y-1 sm:gap-y-0 items-start justify-center text-center overflow-hidden scrollbar-hide leading-tight">
         {text.split("").map((char, index) => {
           const fontSize = isForward
             ? minSize + index * increment
             : maxSize - index * increment;
+
+          if (char === ' ') {
+            // On mobile force a line break between words so the title never
+            // overflows the viewport; on desktop keep a normal-width space.
+            return isMobile
+              ? <span key={index} aria-hidden style={{ flexBasis: '100%', height: 0 }} />
+              : <span key={index} aria-hidden style={{ width: `${fontSize * 0.25}rem` }} />;
+          }
 
           return (
             <span
