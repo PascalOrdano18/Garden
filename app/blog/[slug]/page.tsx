@@ -80,7 +80,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <article className="space-y-4 sm:space-y-6">
                 <header>
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-100 mb-3">{data.title}</h1>
-                    <div className="flex items-center gap-3 text-xs sm:text-sm text-gray-500">
+                    <div className="flex items-center gap-3 text-xs sm:text-sm text-gray-300 [text-shadow:_0_1px_3px_rgb(0_0_0_/_0.8)]">
                         <time>{data.date}</time>
                         <span className="w-1 h-1 rounded-full bg-gray-600" />
                         <span>{readingTime} min read</span>

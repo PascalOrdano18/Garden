@@ -43,7 +43,7 @@ export default async function BlogPage(){
 
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-yellow-100">Journal</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-yellow-100 [text-shadow:_0_1px_3px_rgb(0_0_0_/_0.8)]">Journal</h1>
           <ul className="space-y-1 sm:space-y-2">
             {posts.map(({ slug, title, date }) => (
               <li key={slug}>
@@ -53,10 +53,10 @@ export default async function BlogPage(){
                     hover:bg-white/5 active:bg-white/10
                     transition-colors touch-manipulation"
                 >
-                  <h2 className="text-base sm:text-lg font-medium mb-1.5 group-hover:text-yellow-100 group-active:text-yellow-100 transition-colors">
+                  <h2 className="text-base sm:text-lg font-medium mb-1.5 group-hover:text-yellow-100 group-active:text-yellow-100 transition-colors [text-shadow:_0_1px_3px_rgb(0_0_0_/_0.8)]">
                     {title}
                   </h2>
-                  <p className="text-sm text-gray-500">{date}</p>
+                  <p className="text-sm text-gray-300 [text-shadow:_0_1px_3px_rgb(0_0_0_/_0.8)]">{date}</p>
                 </Link>
               </li>
             ))}
